@@ -1,0 +1,15 @@
+services:
+
+  frontend:
+    build: .
+    container_name: BabyMonitor_Frontend
+    ports:
+      - "4200:80"
+    networks:
+      - shared
+
+
+networks:
+  shared:
+    external: true
+    name: shared-app-network
