@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  font-family: Arial, sans-serif;
+}
+
+.panel {
+  border: 2px solid #999;
+  padding: 20px;
+  width: 220px;
+  text-align: center;
+}
+
+.pill {
+  background: #eee;
+  border-radius: 20px;
+  padding: 8px 16px;
+  display: inline-block;
+  margin: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+button {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.apply {
+  margin-top: 20px;
+  width: 100%;
+  padding: 10px;
+}
