@@ -1,11 +1,14 @@
-// import { useState } from "react";
 import "./Dashboard_Student.css";
+import CtgChart from "../../components/CtgChart/CtgChart";
 
-export default function Profile() {
+
+function Dashboard_Student() {
   return (
-    <img
-      src=""
-      alt=""
-    />
-  )
+    <div className="dashboard-student">
+      <h1>Student Dashboard</h1>
+      <CtgChart />
+    </div>
+  );
 }
+
+export default Dashboard_Student;
