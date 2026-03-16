@@ -1,15 +1,40 @@
 import { useState } from "react";
 import "./Dashboard_Docent.css";
+import { HeartbeatSimulation } from "../../Services/HeartbeatAdjustTest";
 
 export default function Dashboard() {
-  const [currentHeartRate] = useState(150);
-  const [adjustAmount] = useState(20);
-  const [timeCost] = useState(20);
+  const [currentHeartRate, setHeartRate] = useState(150);
+  const [adjustAmount, setAdjustAmount] = useState(20);
+  const [timeCost, setTimeCost] = useState(20);
+
+  const [increaseDecrease, setIncreaseDecrease] = useState<boolean>(true);
 
   const [delay] = useState(2);
   const [depth] = useState(5);
 
   const [speed] = useState(1);
+
+  const IncreaseHeartbeat = () : void => {
+    setIncreaseDecrease(true);
+  }
+  const DecreaseHeartbeat = () : void => {
+    setIncreaseDecrease(false);
+  }
+
+  const EditHeartbeat = () : void => {
+    const amount : number = increaseDecrease ? adjustAmount : -adjustAmount;
+      HeartbeatSimulation(amount,timeCost, setHeartRate);
+      setAdjustAmount(20);
+      setTimeCost(20);
+  }
+
+  const EditHeartbeatTimeNeeded = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTimeCost(Number(e.target.value));
+  }
+
+  const ChangeAdjustValue = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setAdjustAmount(Number(e.target.value));
+  }
 
   return (
     <div className="container">
@@ -23,19 +48,34 @@ export default function Dashboard() {
         <p>Pas aan met</p>
 
         <div className="row">
-          <button>-</button>
-          <div className="pill">{adjustAmount} bpm</div>
-          <button>+</button>
+          <button onClick={DecreaseHeartbeat}
+                  className={increaseDecrease ? "button" : "button glow"}>-</button>
+
+          <div className="row">
+            <input
+              type = "number"
+              value = {adjustAmount}
+              onChange={ChangeAdjustValue}
+              className="pill"/>
+            {adjustAmount} bpm
+            </div>
+
+          <button onClick={IncreaseHeartbeat}
+                  className={increaseDecrease ? "button glow" : "button"}>+</button>
         </div>
 
         <p>Tijd die het kost</p>
 
         <div className="row">
-          <div className="pill">{timeCost}</div>
+          <input
+           type = "number"
+           value={timeCost}
+           onChange={EditHeartbeatTimeNeeded}
+           className="pill" />
           <span>Secondes</span>
         </div>
 
-        <button className="apply">Pas aan</button>
+        <button onClick={EditHeartbeat} className="apply">Pas aan</button>
       </div>
 
 
