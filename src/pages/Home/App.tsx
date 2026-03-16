@@ -1,6 +1,7 @@
 import {  Route, Routes, useNavigate } from "react-router-dom";
 import { useWebSocket } from "../../WebContext";
 import Dashboard from "../Dashboard_Docent/Dashboard_Docent";
+import Student from "../Dashboard_Student/Dashboard_Student";
 
 
 function Home() {
@@ -19,6 +20,7 @@ function Home() {
       <button onClick={handleStart}>Go to Dashboard</button>
     </div>
   );
+
 }
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/student" element={<Student />} />
     </Routes>
   );
 }
