@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev  # optional: separate dev Dockerfile
+    container_name: BabyMonitor_Frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks: 
+      - babymonitor-net
+    command: npm run dev -- --host   # runs Vite dev server
+
+networks:
+  babymonitor-net:
+    external: true
+   
+
+

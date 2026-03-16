@@ -1,11 +1,22 @@
-import { Routes, Route } from "react-router-dom";
+import {  Route, Routes, useNavigate } from "react-router-dom";
+import { useWebSocket } from "../../WebContext";
 import Dashboard from "../Dashboard_Docent/Dashboard_Docent";
 
+
 function Home() {
+  const navigate = useNavigate();
+  const { connect} = useWebSocket();
+
+  const handleStart = () => {
+    connect(() => {
+      navigate("/dashboard");
+    });
+  };
+
   return (
     <div>
       <h1>Welcome to Baby Monitor</h1>
-      <a href="/dashboard">Go to Dashboard</a>
+      <button onClick={handleStart}>Go to Dashboard</button>
     </div>
   );
 }
@@ -20,3 +31,5 @@ function App() {
 }
 
 export default App;
+
+
