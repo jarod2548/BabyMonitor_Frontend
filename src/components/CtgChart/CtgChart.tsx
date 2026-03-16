@@ -1,25 +1,67 @@
-import { LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Line } from 'recharts';
+ import {CartesianGrid,Legend,Line,LineChart,ResponsiveContainer,Tooltip,XAxis,YAxis,} from "recharts";
 
-const CtgChart= ({ isAnimationActive = true }) => (
-  <LineChart
-    style={{ width: '100%', maxWidth: '700px', maxHeight: '70vh', aspectRatio: 1.618 }}
-    responsive
-    // data={ctg}
-    margin={{
-      top: 5,
-      right: 30,
-      left: 20,
-      bottom: 5,
-    }}
-  >
-    <CartesianGrid strokeDasharray="3 3" />
-    <XAxis dataKey="name" />
-    <YAxis width="auto" />
-    <Tooltip />
-    <Legend />
-    <Line type="monotone" dataKey="Bpm" stroke="#8884d8" isAnimationActive={isAnimationActive} />
-    <Line type="monotone" dataKey="Toco" stroke="#82ca9d" isAnimationActive={isAnimationActive} />
-  </LineChart>
-);
+  import { mockCtgData } from "../MockData";
+  import type { CtgPoint } from "../../contracts/ctg";
 
-export default CtgChart;
+  type CtgChartProps = {data?: CtgPoint[];isAnimationActive?: boolean;};
+
+  const formatTimestamp = (timestamp: string) =>new Date(timestamp).toLocaleTimeString([], {hour: "2-digit",minute: "2-digit",});
+
+  function CtgChart({data = mockCtgData,isAnimationActive = true,}: 
+    
+    CtgChartProps) {
+    return (
+      <div style={{ width: "100%", height: "420px" }}>
+        <ResponsiveContainer>
+          <LineChart
+            data={data}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis
+              dataKey="timestamp"
+              minTickGap={24}
+              tickFormatter={formatTimestamp}
+            />
+            <YAxis
+              yAxisId="heartRate"
+              width={50}
+              domain={[90, 190]}
+              label={{ value: "BPM", angle: -90, position: "insideLeft" }}
+            />
+            <YAxis
+              yAxisId="toco"
+              orientation="right"
+              width={40}
+              domain={[0, 100]}
+              label={{ value: "TOCO", angle: 90, position: "insideRight" }}
+            />
+            <Tooltip labelFormatter={(value) => formatTimestamp(String(value))} />
+            <Legend />
+            <Line
+              yAxisId="heartRate"
+              type="monotone"
+              dataKey="fhrBpm"
+              name="Foetal heart rate"
+              stroke="#cb4335"
+              dot={false}
+              strokeWidth={2}
+              isAnimationActive={isAnimationActive}
+            />
+            <Line
+              yAxisId="toco"
+              type="monotone"
+              dataKey="toco"
+              name="Contractions"
+              stroke="#2874a6"
+              dot={false}
+              strokeWidth={2}
+              isAnimationActive={isAnimationActive}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+
+  export default CtgChart;
