@@ -3,9 +3,9 @@ FROM node:20-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN --mount=type=cache,target=/root/.npm npm ci
 COPY . .
-RUN npm run build
+RUN --mount=type=cache,target=/app/.angular/cache npm run build
 
 # Production stage: serve static files with Nginx
 FROM nginx:alpine

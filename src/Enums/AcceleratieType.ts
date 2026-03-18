@@ -1,0 +1,1 @@
+export type AcceleratieType = "Vroeg" | "Laat" | "Variable" | "Deacceleratie"
