@@ -3,14 +3,38 @@ import "./Dashboard_Docent.css";
 import CtgChart from "../../components/CtgChart/CtgChart";
 
 export default function Dashboard() {
-  const [currentHeartRate] = useState(150);
-  const [adjustAmount] = useState(20);
-  const [timeCost] = useState(20);
+  const [currentHeartRate, setHeartRate] = useState(150);
+  const [adjustAmount, setAdjustAmount] = useState(20);
+  const [timeCost, setTimeCost] = useState(20);
+
+  const [increaseDecrease, setIncreaseDecrease] = useState<boolean>(true);
 
   const [delay] = useState(2);
   const [depth] = useState(5);
 
   const [speed] = useState(1);
+
+  const IncreaseHeartbeat = () : void => {
+    setIncreaseDecrease(true);
+  }
+  const DecreaseHeartbeat = () : void => {
+    setIncreaseDecrease(false);
+  }
+
+  const EditHeartbeat = () : void => {
+    const amount : number = increaseDecrease ? adjustAmount : -adjustAmount;
+      HeartbeatSimulation(amount,timeCost, setHeartRate);
+      setAdjustAmount(20);
+      setTimeCost(20);
+  }
+
+  const EditHeartbeatTimeNeeded = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTimeCost(Number(e.target.value));
+  }
+
+  const ChangeAdjustValue = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setAdjustAmount(Number(e.target.value));
+  }
 
   return (
     <div className="container">

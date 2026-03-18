@@ -3,7 +3,8 @@
   flex-direction: column;
   gap: 24px;
   padding: 40px;
-  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: #f5f7fa;
 }
 
 .CTG.Grafiek {
@@ -31,25 +32,38 @@
 }
 
 .pill {
-  background: #eee;
-  border-radius: 20px;
-  padding: 8px 16px;
+  background: #e9eef5;
+  border-radius: 25px;
+  padding: 10px 20px;
   display: inline-block;
   margin: 10px;
+  font-size: 18px;
 }
 
 .row {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  margin: 10px 0;
 }
 
-button {
-  padding: 6px 12px;
+.button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #dce3ec;
   cursor: pointer;
+  font-size: 16px;
 }
 
+.button:hover {
+  background: #cfd7e2;
+}
+
+.glow {
+  box-shadow: 0 0 8px 2px rgba(0,150,255,0.6);
+}
 .apply {
   margin-top: 20px;
   width: 100%;
