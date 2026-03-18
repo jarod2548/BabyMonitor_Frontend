@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./Dashboard_Docent.css";
 import { HeartbeatSimulation } from "../../Services/HeartbeatAdjustTest";
+import CtgChart from "../../components/CtgChart/CtgChart";
 import type { AcceleratieType } from "../../Enums/AcceleratieType";
 import type { HeartbeatData } from "../../contracts/HeartbeatData";
 import type { WeeData } from "../../contracts/WeeData";
