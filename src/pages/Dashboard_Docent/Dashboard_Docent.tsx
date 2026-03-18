@@ -114,8 +114,13 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
                   className={heartbeat.isPositief ? "button glow" : "button"}>+</button>
         </div>
 
+          <p>Tijd die het kost</p>
         <p>Aanpassen over</p>
 
+          <div className="row">
+            <div className="pill">{timeCost}</div>
+            <span>Secondes</span>
+          </div>
         <div className="row">
           <input
            type = "number"
@@ -128,13 +133,20 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
         <button onClick={EditHeartbeat} className="apply">Pas aan</button>
       </div>
 
-
+        {/* Decleraties */}
+        <div className="panel">
+          <h2>Decleraties</h2>
       {/* Decleraties */}
       <div className="panel">
         <h2>Acceleraties/Decceleraties</h2>
 
+          <p>Tijd na wee</p>
         <p>Duratie van wee</p>
 
+          <div className="row">
+            <div className="pill">{delay}</div>
+            <span>Secondes</span>
+          </div>
         <div className="row">
           <input
            type = "number"
@@ -144,8 +156,13 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
           <span>Secondes</span>
         </div>
 
+          <p>Diepte</p>
         <p>Sterkte van wee</p>
 
+          <div className="row">
+            <div className="pill">{depth}</div>
+            <span>bpm</span>
+          </div>
         <div className="row">
           <input
            type = "number"
@@ -168,6 +185,8 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
            </select>
       </div>  
 
+          <button className="apply">Pas aan</button>
+        </div>
         <button className="apply">Pas aan</button>
       </div>
 
@@ -177,12 +196,22 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
         {/* Snelheid */}
         <div className="panel">
           <h2>Snelheid</h2>
+        {/* Snelheid */}
+        <div className="panel">
+          <h2>Snelheid</h2>
 
           <div className="row">
             <div className="pill">{speed}</div>
             <span>x</span>
           </div>
+          <div className="row">
+            <div className="pill">{speed}</div>
+            <span>x</span>
+          </div>
 
+          <button className="apply">Pas aan</button>
+        </div>
+      </div>
           <button className="apply">Pas aan</button>
         </div>
       </div>
