@@ -1,14 +1,32 @@
 .container {
   display: flex;
-  gap: 40px;
+  flex-direction: column;
+  gap: 24px;
   padding: 40px;
   font-family: Arial, sans-serif;
+}
+
+.CTG.Grafiek {
+  border: 2px solid #999;
+  padding: 20px;
+  width: min(100%, 960px);
+  text-align: center;
+}
+
+.panels {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 24px;
+  width: min(100%, 960px);
+  overflow-x: auto;
 }
 
 .panel {
   border: 2px solid #999;
   padding: 20px;
   width: 220px;
+  min-width: 220px;
+  flex: 0 0 220px;
   text-align: center;
 }
 
@@ -36,4 +54,10 @@ button {
   margin-top: 20px;
   width: 100%;
   padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
 }

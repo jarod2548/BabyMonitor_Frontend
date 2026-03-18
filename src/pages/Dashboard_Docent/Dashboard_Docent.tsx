@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Dashboard_Docent.css";
+import CtgChart from "../../components/CtgChart/CtgChart";
 
 export default function Dashboard() {
   const [currentHeartRate] = useState(150);
@@ -13,66 +14,71 @@ export default function Dashboard() {
 
   return (
     <div className="container">
+      <h1>Docent Dashboard</h1>
 
-      {/* Hartslag */}
-      <div className="panel">
-        <h2>Huidige Hartslag</h2>
-
-        <div className="pill">{currentHeartRate} bpm</div>
-
-        <p>Pas aan met</p>
-
-        <div className="row">
-          <button>-</button>
-          <div className="pill">{adjustAmount} bpm</div>
-          <button>+</button>
-        </div>
-
-        <p>Tijd die het kost</p>
-
-        <div className="row">
-          <div className="pill">{timeCost}</div>
-          <span>Secondes</span>
-        </div>
-
-        <button className="apply">Pas aan</button>
+      <div className="CTGGrafiek">
+        <h2>CTG Grafiek</h2>
+        <CtgChart />
       </div>
 
+      <div className="panels">
+        {/* Hartslag */}
+        <div className="panel">
+          <h2>Huidige Hartslag</h2>
 
-      {/* Decleraties */}
-      <div className="panel">
-        <h2>Decleraties</h2>
+          <div className="pill">{currentHeartRate} bpm</div>
 
-        <p>Tijd na wee</p>
+          <p>Pas aan met</p>
 
-        <div className="row">
-          <div className="pill">{delay}</div>
-          <span>Secondes</span>
+          <div className="row">
+            <button>-</button>
+            <div className="pill">{adjustAmount} bpm</div>
+            <button>+</button>
+          </div>
+
+          <p>Tijd die het kost</p>
+
+          <div className="row">
+            <div className="pill">{timeCost}</div>
+            <span>Secondes</span>
+          </div>
+
+          <button className="apply">Pas aan</button>
         </div>
 
-        <p>Diepte</p>
+        {/* Decleraties */}
+        <div className="panel">
+          <h2>Decleraties</h2>
 
-        <div className="row">
-          <div className="pill">{depth}</div>
-          <span>bpm</span>
+          <p>Tijd na wee</p>
+
+          <div className="row">
+            <div className="pill">{delay}</div>
+            <span>Secondes</span>
+          </div>
+
+          <p>Diepte</p>
+
+          <div className="row">
+            <div className="pill">{depth}</div>
+            <span>bpm</span>
+          </div>
+
+          <button className="apply">Pas aan</button>
         </div>
 
-        <button className="apply">Pas aan</button>
+        {/* Snelheid */}
+        <div className="panel">
+          <h2>Snelheid</h2>
+
+          <div className="row">
+            <div className="pill">{speed}</div>
+            <span>x</span>
+          </div>
+
+          <button className="apply">Pas aan</button>
+        </div>
       </div>
-
-
-      {/* Snelheid */}
-      <div className="panel">
-        <h2>Snelheid</h2>
-
-        <div className="row">
-          <div className="pill">{speed}</div>
-          <span>x</span>
-        </div>
-
-        <button className="apply">Pas aan</button>
-      </div>
-
     </div>
   );
 }
