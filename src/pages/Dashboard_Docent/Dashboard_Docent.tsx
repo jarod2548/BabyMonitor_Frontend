@@ -80,14 +80,21 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
 
   return (
     <div className="container">
+      <h1>Docent Dashboard</h1>
 
-      {/* Hartslag */}
-      <div className="panel">
-        <h2>Huidige Hartslag</h2>
+      <div className="CTGGrafiek">
+        <h2>CTG Grafiek</h2>
+        <CtgChart />
+      </div>
+
+      <div className="panels">
+        {/* Hartslag */}
+        <div className="panel">
+          <h2>Huidige Hartslag</h2>
 
         <div className="pill">{huidigehartslag} bpm</div>
 
-        <p>Pas aan met</p>
+          <p>Pas aan met</p>
 
         <div className="row">
           <button onClick={DecreaseHeartbeat}
@@ -166,18 +173,18 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
       
 
 
-      {/* Snelheid */}
-      <div className="panel">
-        <h2>Snelheid</h2>
+        {/* Snelheid */}
+        <div className="panel">
+          <h2>Snelheid</h2>
 
-        <div className="row">
-          <div className="pill">{speed}</div>
-          <span>x</span>
+          <div className="row">
+            <div className="pill">{speed}</div>
+            <span>x</span>
+          </div>
+
+          <button className="apply">Pas aan</button>
         </div>
-
-        <button className="apply">Pas aan</button>
       </div>
-
     </div>
   );
 }

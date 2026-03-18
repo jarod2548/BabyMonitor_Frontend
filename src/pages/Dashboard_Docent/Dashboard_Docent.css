@@ -1,16 +1,33 @@
 .container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   padding: 40px;
   min-height: 100vh;
   background: #f5f7fa;
 }
+
+.CTG.Grafiek {
+  border: 2px solid #999;
+  padding: 20px;
+  width: min(100%, 960px);
+  text-align: center;
+}
+
+.panels {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 24px;
+  width: min(100%, 960px);
+  overflow-x: auto;
+}
+
 .panel {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  border: 2px solid #999;
+  padding: 20px;
+  width: 220px;
+  min-width: 220px;
+  flex: 0 0 220px;
   text-align: center;
 }
 
@@ -50,15 +67,11 @@
 .apply {
   margin-top: 20px;
   width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: #2f6fed;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
+  padding: 10px;
 }
 
-.apply:hover {
-  background: #2459c7;
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
 }
