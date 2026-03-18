@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Dashboard_Docent.css";
+import CtgChart from "../../components/CtgChart/CtgChart";
 import { HeartbeatSimulation } from "../../Services/HeartbeatAdjustTest";
 import type { AcceleratieType } from "../../Enums/AcceleratieType";
 import type { HeartbeatData } from "../../contracts/HeartbeatData";
@@ -80,15 +81,28 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
 
   return (
     <div className="container">
+      <h1>Docent Dashboard</h1>
 
-      {/* Hartslag */}
-      <div className="panel">
-        <h2>Huidige Hartslag</h2>
+      <div className="CTGGrafiek">
+        <h2>CTG Grafiek</h2>
+        <CtgChart />
+      </div>
 
+      <div className="panels">
+        {/* Hartslag */}
+        <div className="panel">
+          <h2>Huidige Hartslag</h2>
+
+          <div className="pill">{currentHeartRate} bpm</div>
         <div className="pill">{huidigehartslag} bpm</div>
 
-        <p>Pas aan met</p>
+          <p>Pas aan met</p>
 
+          <div className="row">
+            <button>-</button>
+            <div className="pill">{adjustAmount} bpm</div>
+            <button>+</button>
+          </div>
         <div className="row">
           <button onClick={DecreaseHeartbeat}
                   className={heartbeat.isPositief ? "button" : "button glow"}>-</button>
@@ -106,8 +120,13 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
                   className={heartbeat.isPositief ? "button glow" : "button"}>+</button>
         </div>
 
+          <p>Tijd die het kost</p>
         <p>Aanpassen over</p>
 
+          <div className="row">
+            <div className="pill">{timeCost}</div>
+            <span>Secondes</span>
+          </div>
         <div className="row">
           <input
            type = "number"
@@ -117,16 +136,23 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
           <span>Secondes</span>
         </div>
 
-        <button onClick={EditHeartbeat} className="apply">Pas aan</button>
-      </div>
+          <button className="apply">Pas aan</button>
+        </div>
 
-
+        {/* Decleraties */}
+        <div className="panel">
+          <h2>Decleraties</h2>
       {/* Decleraties */}
       <div className="panel">
         <h2>Acceleraties/Decceleraties</h2>
 
+          <p>Tijd na wee</p>
         <p>Duratie van wee</p>
 
+          <div className="row">
+            <div className="pill">{delay}</div>
+            <span>Secondes</span>
+          </div>
         <div className="row">
           <input
            type = "number"
@@ -136,8 +162,13 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
           <span>Secondes</span>
         </div>
 
+          <p>Diepte</p>
         <p>Sterkte van wee</p>
 
+          <div className="row">
+            <div className="pill">{depth}</div>
+            <span>bpm</span>
+          </div>
         <div className="row">
           <input
            type = "number"
@@ -160,24 +191,26 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
            </select>
       </div>  
 
+          <button className="apply">Pas aan</button>
+        </div>
         <button className="apply">Pas aan</button>
       </div>
 
       
 
 
-      {/* Snelheid */}
-      <div className="panel">
-        <h2>Snelheid</h2>
+        {/* Snelheid */}
+        <div className="panel">
+          <h2>Snelheid</h2>
 
-        <div className="row">
-          <div className="pill">{speed}</div>
-          <span>x</span>
+          <div className="row">
+            <div className="pill">{speed}</div>
+            <span>x</span>
+          </div>
+
+          <button className="apply">Pas aan</button>
         </div>
-
-        <button className="apply">Pas aan</button>
       </div>
-
     </div>
   );
 }
