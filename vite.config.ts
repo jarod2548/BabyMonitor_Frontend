@@ -7,5 +7,15 @@ export default defineConfig({
   define: {
     global: "window",
   },
-
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          charts: ["recharts"],
+          websocket: ["@stomp/stompjs", "sockjs-client"],
+          vendor: ["react", "react-dom", "react-router-dom"]
+        }
+      }
+    }
+  }
 })

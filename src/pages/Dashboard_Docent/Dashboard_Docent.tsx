@@ -1,44 +1,86 @@
 import { useState } from "react";
 import "./Dashboard_Docent.css";
+import { HeartbeatSimulation } from "../../Services/HeartbeatAdjustTest";
+import type { AcceleratieType } from "../../Enums/AcceleratieType";
+import type { HeartbeatData } from "../../contracts/HeartbeatData";
+import type { WeeData } from "../../contracts/WeeData";
 import CtgChart from "../../components/CtgChart/CtgChart";
 
 export default function Dashboard() {
-  const [currentHeartRate, setHeartRate] = useState(150);
-  const [adjustAmount, setAdjustAmount] = useState(20);
-  const [timeCost, setTimeCost] = useState(20);
+    const [heartbeat, setHeartbeat] = useState<HeartbeatData>({
+    aanpassingAantal: 20,
+    tijdDuratie: 20,
+    isPositief: true
+  });
 
-  const [increaseDecrease, setIncreaseDecrease] = useState<boolean>(true);
+  const [huidigehartslag, setHuidigeHartslag] = useState(110);
 
-  const [delay] = useState(2);
-  const [depth] = useState(5);
+  const [weeData, setWeeData] = useState<WeeData>({
+    weeDuratie : 2,
+    weeSterkte : 2,
+    acceleratieType : "Vroeg"
+  });
+  
 
   const [speed] = useState(1);
 
   const IncreaseHeartbeat = () : void => {
-    setIncreaseDecrease(true);
+    setHeartbeat(prev => ({
+      ...prev,
+      isPositief: true
+    }));
   }
   const DecreaseHeartbeat = () : void => {
-    setIncreaseDecrease(false);
+    setHeartbeat(prev => ({
+      ...prev,
+      isPositief: false
+    }));
   }
 
   const EditHeartbeat = () : void => {
-    const amount : number = increaseDecrease ? adjustAmount : -adjustAmount;
-      HeartbeatSimulation(amount,timeCost, setHeartRate);
-      setAdjustAmount(20);
-      setTimeCost(20);
+    const amount : number = heartbeat.isPositief ? heartbeat.aanpassingAantal : -heartbeat.aanpassingAantal;
+      HeartbeatSimulation(amount,heartbeat.tijdDuratie, setHuidigeHartslag);
+  }
+  const setAanpassingAantal = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setHeartbeat(prev => ({
+    ...prev,
+    aanpassingAantal: (Number(e.target.value))
+  }));
+};
+
+const setTijdDuratie = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setHeartbeat(prev => ({
+    ...prev,
+    tijdDuratie: (Number(e.target.value))
+  }));
+};
+const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setWeeData(prev => ({
+      ...prev,
+      weeDuratie: (Number(e.target.value))
+    }));
   }
 
-  const EditHeartbeatTimeNeeded = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTimeCost(Number(e.target.value));
+  const ChangeWeeSterkte = (e : React.ChangeEvent<HTMLInputElement>) => {
+    setWeeData(prev => ({
+      ...prev,
+      weeSterkte: (Number(e.target.value))
+    }));
   }
 
-  const ChangeAdjustValue = (e : React.ChangeEvent<HTMLInputElement>) => {
-    setAdjustAmount(Number(e.target.value));
+  const ChangeWeeType = (e : React.ChangeEvent<HTMLSelectElement>) => {
+    setWeeData(prev => ({
+      ...prev,
+      acceleratieType: e.target.value as AcceleratieType
+    }));
   }
+
+
+
+  
 
   return (
     <div className="container">
-      <h1>Docent Dashboard</h1>
 
       <div className="CTGGrafiek">
         <h2>CTG Grafiek</h2>
@@ -47,62 +89,105 @@ export default function Dashboard() {
 
       <div className="panels">
         {/* Hartslag */}
-        <div className="panel">
-          <h2>Huidige Hartslag</h2>
+      <div className="panel">
+        <h2>Huidige Hartslag</h2>
 
-          <div className="pill">{currentHeartRate} bpm</div>
+        <div className="pill">{huidigehartslag} bpm</div>
 
-          <p>Pas aan met</p>
+        <p>Pas aan met</p>
 
-          <div className="row">
-            <button>-</button>
-            <div className="pill">{adjustAmount} bpm</div>
-            <button>+</button>
-          </div>
-
-          <p>Tijd die het kost</p>
+        <div className="row">
+          <button onClick={DecreaseHeartbeat}
+                  className={heartbeat.isPositief ? "button" : "button glow"}>-</button>
 
           <div className="row">
-            <div className="pill">{timeCost}</div>
-            <span>Secondes</span>
-          </div>
+            <input
+              type = "number"
+              value = {heartbeat.aanpassingAantal}
+              onChange={setAanpassingAantal}
+              className="pill"/>
+            {heartbeat.aanpassingAantal} bpm
+            </div>
 
-          <button className="apply">Pas aan</button>
+          <button onClick={IncreaseHeartbeat}
+                  className={heartbeat.isPositief ? "button glow" : "button"}>+</button>
         </div>
 
-        {/* Decleraties */}
-        <div className="panel">
-          <h2>Decleraties</h2>
+        <p>Aanpassen over</p>
 
-          <p>Tijd na wee</p>
-
-          <div className="row">
-            <div className="pill">{delay}</div>
-            <span>Secondes</span>
-          </div>
-
-          <p>Diepte</p>
-
-          <div className="row">
-            <div className="pill">{depth}</div>
-            <span>bpm</span>
-          </div>
-
-          <button className="apply">Pas aan</button>
+        <div className="row">
+          <input
+           type = "number"
+           value={heartbeat.tijdDuratie}
+           onChange={setTijdDuratie}
+           className="pill" />
+          <span>Secondes</span>
         </div>
 
-        {/* Snelheid */}
-        <div className="panel">
-          <h2>Snelheid</h2>
-
-          <div className="row">
-            <div className="pill">{speed}</div>
-            <span>x</span>
-          </div>
-
-          <button className="apply">Pas aan</button>
-        </div>
+        <button onClick={EditHeartbeat} className="apply">Pas aan</button>
       </div>
+
+
+      {/* Decleraties */}
+      <div className="panel">
+        <h2>Acceleraties/Decceleraties</h2>
+
+        <p>Duratie van wee</p>
+
+        <div className="row">
+          <input
+           type = "number"
+           value={weeData.weeDuratie}
+           onChange={ChangeWeeDuratie}
+           className="pill" />
+          <span>Secondes</span>
+        </div>
+
+        <p>Sterkte van wee</p>
+
+        <div className="row">
+          <input
+           type = "number"
+           value={weeData.weeSterkte}
+           onChange={ChangeWeeSterkte}
+           className="pill" />
+          <span>%</span>
+        </div>
+
+        <p>Type</p>
+      <div className="row">
+        <select
+           value={weeData.acceleratieType}
+           onChange={ChangeWeeType}
+           className="pill">
+            <option value="Vroeg">Vroeg</option>
+            <option value="Deacceleratie">Decceleratie</option>
+            <option value="Laat">Laat</option>
+            <option value="Variable">Variable</option>
+           </select>
+      </div>  
+
+        <button className="apply">Pas aan</button>
+      </div>
+
+      
+
+
+      {/* Snelheid */}
+      <div className="panel">
+        <h2>Snelheid</h2>
+
+        <div className="row">
+          <div className="pill">{speed}</div>
+          <span>x</span>
+        </div>
+
+        <button className="apply">Pas aan</button>
+      </div>
+      </div>
+
+      
+
     </div>
   );
 }
