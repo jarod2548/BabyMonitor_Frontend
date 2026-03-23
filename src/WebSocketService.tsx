@@ -1,13 +1,11 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import type { WSMessage } from "./WebTypes";
 
 export class WebSocketService {
   private client: Client | null = null;
-  private sessionId : string | null = null;
   
 
-  connect(onConnected?: (groupId: string) => void) {
+  connect(onConnected?: () => void) {
     if (this.client?.active) this.client.deactivate();
 
     const socket = new SockJS("/connection");
@@ -19,12 +17,7 @@ export class WebSocketService {
 
     stompClient.onConnect = () => {
       console.log("✅ connected to server");
-
-      const subscription = stompClient.subscribe("/topic/session", (msg) => {
-        this.sessionId = msg.body;
-        if (onConnected) onConnected(this.sessionId);
-        subscription.unsubscribe();
-      });
+      if(onConnected) onConnected();
     };
 
     stompClient.onStompError = (frame) => {
@@ -33,17 +26,6 @@ export class WebSocketService {
 
     stompClient.activate();
     this.client = stompClient;
-  }
-
-  sendMessage(destination: string, payload: WSMessage, GroupId: string) {
-    if (this.client?.connected) {
-      this.client.publish({
-        destination,
-        body: JSON.stringify({ groupId: GroupId, payload }),
-      });
-    } else {
-      console.warn("❌ WebSocket not connected yet");
-    }
   }
 }
 

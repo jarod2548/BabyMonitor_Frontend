@@ -1,43 +1,53 @@
 .container {
   display: flex;
   flex-direction: column;
+  align-items: center; /* center content */
   gap: 24px;
   padding: 40px;
   min-height: 100vh;
   background: #f5f7fa;
 }
 
-.CTG.Grafiek {
+/* Wrapper to control max width */
+.wrapper {
+  width: min(100%, 960px);
+}
+
+/* Fix class name to match JSX */
+.CTGGrafiek {
   border: 2px solid #999;
   padding: 20px;
-  width: min(100%, 960px);
+  width: 100%;
   text-align: center;
 }
 
+/* Panels row */
 .panels {
   display: flex;
-  flex-wrap: nowrap;
   gap: 24px;
-  width: min(100%, 960px);
-  overflow-x: auto;
+  width: 100%;
+  align-items: stretch; /* equal height panels */
 }
 
+/* Individual panel */
 .panel {
   border: 2px solid #999;
   padding: 20px;
-  width: 220px;
-  min-width: 220px;
-  flex: 0 0 220px;
+  flex: 1 1 0; /* 🔥 ensures equal width */
+  min-width: 0;
   text-align: center;
 }
 
+/* UI elements */
 .pill {
   background: #e9eef5;
   border-radius: 25px;
   padding: 10px 20px;
   display: inline-block;
-  margin: 10px;
+  margin: 0px;
   font-size: 18px;
+  max-width: 80px;
+  text-align: center;
 }
 
 .row {
@@ -64,14 +74,20 @@
 .glow {
   box-shadow: 0 0 8px 2px rgba(0,150,255,0.6);
 }
+
 .apply {
   margin-top: 20px;
   width: 100%;
   padding: 10px;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .container {
     padding: 20px;
+  }
+
+  .panels {
+    flex-direction: column; /* stack panels */
   }
 }
