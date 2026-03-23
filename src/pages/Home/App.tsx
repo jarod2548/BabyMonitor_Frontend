@@ -4,64 +4,99 @@ import Dashboard from "../Dashboard_Docent/Dashboard_Docent";
 import Student from "../Dashboard_Student/Dashboard_Student";
 import { groupService } from "../../Services/GroupService";
 import { useState } from "react";
-
+import './App.css';
+import type { Group } from "../../contracts/Group";
 
 function Home() {
   const navigate = useNavigate();
 
-  const [inputVisible, setInputVisible] = useState(false);
+  const [creationVisible, setCreationVisible] = useState(false);
+  const [joinVisible, setJoinVisible] = useState(false);
+  const [groepen, setGroepen] = useState<Group[]>([])
 
-  const toggleInput = () => setInputVisible(prev => !prev);
+  const showCreateGroup = () => setCreationVisible(prev => !prev);
+  const showJoinGroup = async () => {
+    await fetchGroepen();
+    setJoinVisible(prev => !prev);
+  }
+
+  const fetchGroepen = async () => {
+    try {
+      const response = await groupService.getFakeGroups();
+      setGroepen(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const goToTeacher = async () => {
     try{
+      await wsService.connect();
       const groupResponse = await groupService.createGroup("groep");
       localStorage.setItem("groupId", groupResponse.data);
-      wsService.connect(() => {
       navigate("/teacher");
-    });
-    }catch(error){
+    }
+    catch(error){
       console.log(error);
     }
   };
   const goToTeacherDev = () => {
       navigate("/teacher");
   };
-  const goToStudent = () => {
+  const goToStudent = (groepId : string) => {
+    console.log("Clicked group:", groepId);
       navigate("/student");
   };
+
+
 
   return (
     <div>
       <h1>Welcome to Baby Monitor</h1>
       <button onClick={goToTeacher}>Leraar</button>
       <button onClick={goToTeacherDev}>Leraar DEVOLEPMENT</button>
-      <button onClick={goToStudent}>Student</button>
       <button
         style={{ position: "absolute", top: 20, right: 20, zIndex: 1000 }}
-        onClick={toggleInput}
+        onClick={showCreateGroup}
       >
-        {inputVisible ? "Hide Input" : "Show Input"}
+      </button>
+      <button
+        style={{ position: "absolute", top: 80, right: 20, zIndex: 1000 }}
+        onClick={showJoinGroup}
+      >
       </button>
 
-      {/* Hidden / visible input overlay */}
-      <input
-        type="text"
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "70vw",
-          height: "70vw",
-          opacity: inputVisible ? 1 : 0, // toggle visibility
-          zIndex: 9999,
-          border: inputVisible ? "2px solid blue" : "none",
-          outline: inputVisible ? "auto" : "none",
-          background: inputVisible ? "rgba(255,255,255,0.2)" : "transparent",
-        }}
-        autoFocus={inputVisible}
-      />
+                {creationVisible && (
+            <div className="overlay">
+              <div className="modal-box">
+                <h1>Voer een groeps naam in</h1>
+                <input type="text" placeholder="groepnaam" autoFocus required/>
+                <button>Start als leraar</button>
+                <button 
+                  onClick={showCreateGroup}
+                >Ga terug
+                </button>
+              </div>
+            </div>
+          )}
+          {joinVisible && (
+            <div className="overlay">
+              <div className="modal-box">
+                <h1>Doe mee met een groep</h1>
+                <div>
+                  {groepen.map(g => (
+                    <button key={g.groepId} onClick={() => goToStudent(g.groepId)}>
+                      {g.groepNaam}
+                    </button>
+                  ))}
+                </div>
+                <button 
+                  onClick={showJoinGroup}
+                >Ga terug
+                </button>
+              </div>
+            </div>
+          )}
     </div>
   );
 

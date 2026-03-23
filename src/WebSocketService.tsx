@@ -5,7 +5,8 @@ export class WebSocketService {
   private client: Client | null = null;
   
 
-  connect(onConnected?: () => void) {
+connect() {
+  return new Promise((resolve, reject) => {
     if (this.client?.active) this.client.deactivate();
 
     const socket = new SockJS("/connection");
@@ -17,17 +18,20 @@ export class WebSocketService {
 
     stompClient.onConnect = () => {
       console.log("✅ connected to server");
-      if(onConnected) onConnected();
+      resolve(stompClient); 
     };
 
     stompClient.onStompError = (frame) => {
       console.error("❌ Broker error:", frame.headers["message"]);
+      reject(new Error(frame.headers["message"]));
     };
 
     stompClient.activate();
     this.client = stompClient;
-  }
+  });
 }
+}
+
 
 // Singleton instance — import this anywhere
 export const wsService = new WebSocketService();
