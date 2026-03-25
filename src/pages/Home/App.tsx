@@ -48,6 +48,10 @@ function Home() {
       console.log(error);
     }
   };
+
+  // const goToTeacherDev = () => {
+  //     navigate("/teacher");
+  // };
   
   const heartbeatReceived = () => {
 
