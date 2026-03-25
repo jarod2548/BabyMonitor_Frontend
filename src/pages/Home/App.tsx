@@ -4,69 +4,79 @@ import Dashboard from "../Dashboard_Docent/Dashboard_Docent";
 import Student from "../Dashboard_Student/Dashboard_Student";
 import { groupService } from "../../Services/GroupService";
 import { useState } from "react";
-
+import './App.css';
+import type { Group } from "../../contracts/Group";
+import { CreateGroupModal } from "./CreateGroupModal";
+import { JoinGroupModal } from "./JoinGroupModal";
+import type { maakGroepRequest } from "../../contracts/maakGroepRequest";
 
 function Home() {
   const navigate = useNavigate();
 
-  const [inputVisible, setInputVisible] = useState(false);
+  const [creationVisible, setCreationVisible] = useState(false);
+  const [joinVisible, setJoinVisible] = useState(false);
+  const [groepen, setGroepen] = useState<Group[]>([])
 
-  const toggleInput = () => setInputVisible(prev => !prev);
+  const showCreateGroup = () => setCreationVisible(prev => !prev);
+  const showJoinGroup = async () => {
+    await fetchGroepen();
+    setJoinVisible(prev => !prev);
+  }
 
-  const goToTeacher = async () => {
+  const fetchGroepen = async () => {
+    try {
+      const response = await groupService.getGroups();
+      setGroepen(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const goToTeacher = async (GroepNaam : string) => {
     try{
-      const groupResponse = await groupService.createGroup("groep");
-      localStorage.setItem("groupId", groupResponse.data);
-      wsService.connect(() => {
+      await wsService.connect();
+      const groupRequest : maakGroepRequest = {
+          naam: GroepNaam
+      };
+      const groupResponse = await groupService.createGroup(groupRequest);
+      localStorage.setItem("groupId", groupResponse.data.id);
+      localStorage.setItem("role", "teacher");
       navigate("/teacher");
-    });
-    }catch(error){
+    }
+    catch(error){
       console.log(error);
     }
   };
-  const goToTeacherDev = () => {
-      navigate("/teacher");
-  };
-  const goToStudent = () => {
+  //const goToTeacherDev = () => {
+  //    navigate("/teacher");
+  //};
+  const goToStudent = (groepId : string) => {
+    console.log("Clicked group:", groepId);
+    localStorage.setItem("role", "student");
       navigate("/student");
   };
+
+
 
   return (
     <div>
       <h1>Welcome to Baby Monitor</h1>
-      <button onClick={goToTeacher}>Leraar</button>
-      <button onClick={goToTeacherDev}>Leraar DEVOLEPMENT</button>
-      <button onClick={goToStudent}>Student</button>
-      <button
-        style={{ position: "absolute", top: 20, right: 20, zIndex: 1000 }}
-        onClick={toggleInput}
-      >
-        {inputVisible ? "Hide Input" : "Show Input"}
-      </button>
+      <div className="button-group">
+        <button onClick={showCreateGroup}>Start een groep als docent</button>
+        <button onClick={showJoinGroup}>Doe mee als student</button>
+      </div>
 
-      {/* Hidden / visible input overlay */}
-      <input
-        type="text"
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "70vw",
-          height: "70vw",
-          opacity: inputVisible ? 1 : 0, // toggle visibility
-          zIndex: 9999,
-          border: inputVisible ? "2px solid blue" : "none",
-          outline: inputVisible ? "auto" : "none",
-          background: inputVisible ? "rgba(255,255,255,0.2)" : "transparent",
-        }}
-        autoFocus={inputVisible}
-      />
+      {creationVisible && <CreateGroupModal onClose={showCreateGroup} onCreateGroup={goToTeacher}/>}
+      {joinVisible && (
+        <JoinGroupModal
+          groepen={groepen}
+          onSelectGroup={goToStudent}
+          onClose={showJoinGroup}
+        />
+      )}
     </div>
   );
-
-}
-
+};
 function App() {
   return (
     <Routes>

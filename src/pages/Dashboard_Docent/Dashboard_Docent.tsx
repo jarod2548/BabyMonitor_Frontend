@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Dashboard_Docent.css";
 import { HeartbeatSimulation } from "../../Services/HeartbeatAdjustTest";
+import { groupService } from "../../Services/GroupService";
 import type { AcceleratieType } from "../../Enums/AcceleratieType";
 import type { HeartbeatData } from "../../contracts/HeartbeatData";
 import type { WeeData } from "../../contracts/WeeData";
@@ -75,8 +76,30 @@ const ChangeWeeDuratie = (e : React.ChangeEvent<HTMLInputElement>) => {
     }));
   }
 
+  useEffect(() => {
+  const handleUnload = () => {
+    const role = localStorage.getItem("role");
+    if (role === "teacher") {
+      groupService.leaveGroupOnUnload();
+    }
+  };
+  
 
+  window.addEventListener("beforeunload", handleUnload);
 
+  return () => {
+    window.removeEventListener("beforeunload", handleUnload);
+  };
+}, []);
+useEffect(() => {
+  return () => {
+    // This runs when component unmounts (route changes)
+    const role = localStorage.getItem("role");
+    if (role === "teacher") {
+      groupService.leaveGroupOnUnload(); // sendBeacon
+    }
+  };
+}, [location.pathname]);
   
 
   return (

@@ -1,17 +1,39 @@
 import axios from "axios";
+import type { Group } from "../contracts/Group";
+import type { maakGroepRequest } from "../contracts/maakGroepRequest";
 
 export class GroupService {
 
-    createGroup(groepNaam : string){
-        return axios.post("/api/createGroup", groepNaam);
-    }
+     fakeGroepen : Group[] = [
+        { groepId: "1", naam: "Groep A" },
+        { groepId: "2", naam: "Groep B" },
+        { groepId: "1", naam: "Groep A" },
+        { groepId: "2", naam: "Groep B" },
+    ];
 
-    leaveGroup(groepId : string){
-        return axios.post("/api/leaveGroup", groepId);
+    async createGroup(groepRequest : maakGroepRequest) {
+        console.log(groepRequest);
+        const response = await axios.post("/api/groepen", groepRequest);
+        console.log(response);
+        return response;
+    }
+    
+    async getGroups(){
+        return await axios.get("/api/groepen");
+    }
+    async getFakeGroups(){
+        return await this.fakeGroepen;
+    }
+    leaveGroupOnUnload() {
+        const id = localStorage.getItem("groupId");
+        if (!id) return;
+
+        const url = `/api/leaveGroup/${id}`;
+        navigator.sendBeacon(url);
     }
 
     joinGroup(groepId : string){
-        return axios.post("/api/joinGroup", groepId);
+        return axios.put("/api/joinGroup", groepId);
     }
 }
 export const groupService = new GroupService();
