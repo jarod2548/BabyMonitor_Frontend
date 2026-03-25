@@ -47,7 +47,11 @@ function Home() {
     catch(error){
       console.log(error);
     }
-  };
+  // };
+
+  // const goToTeacherDev = () => {
+  //     navigate("/teacher");
+  // };
   
   const heartbeatReceived = () => {
 
