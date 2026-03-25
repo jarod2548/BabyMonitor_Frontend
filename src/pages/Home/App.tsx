@@ -9,6 +9,7 @@ import type { Group } from "../../contracts/Group";
 import { CreateGroupModal } from "./CreateGroupModal";
 import { JoinGroupModal } from "./JoinGroupModal";
 import type { maakGroepRequest } from "../../contracts/maakGroepRequest";
+import type { HeartbeatData } from "../../contracts/HeartbeatData";
 
 function Home() {
   const navigate = useNavigate();
@@ -40,16 +41,18 @@ function Home() {
       };
       const groupResponse = await groupService.createGroup(groupRequest);
       localStorage.setItem("groupId", groupResponse.data.id);
-      localStorage.setItem("role", "teacher");
+      wsService.subscribe<HeartbeatData>(`/heartbeat/${groupResponse.data.id}`, heartbeatReceived);
       navigate("/teacher");
     }
     catch(error){
       console.log(error);
     }
   };
-  //const goToTeacherDev = () => {
-  //    navigate("/teacher");
-  //};
+  
+  const heartbeatReceived = () => {
+
+  }
+
   const goToStudent = (groepId : string) => {
     console.log("Clicked group:", groepId);
     localStorage.setItem("role", "student");
