@@ -1,8 +1,9 @@
-import { Client } from "@stomp/stompjs";
+import { Client, type StompSubscription } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 
 export class WebSocketService {
   private client: Client | null = null;
+  private subscriptions: Map<string, StompSubscription> = new Map();
   
 
 connect() {
@@ -51,17 +52,28 @@ subscribe<T>(topic: string, callback: (msg: T) => void) {
       return;
     }
 
-    return this.client.subscribe(topic, (message) => {
+    if (this.subscriptions.has(topic)) {
+      this.unsubscribe(topic);
+    }
+
+    const subscription =  this.client.subscribe(topic, (message) => {
       callback(JSON.parse(message.body));
     });
+
+    this.subscriptions.set(topic, subscription);
+
+    return subscription;
   }
 
+  unsubscribe(topic: string) {
+    const sub = this.subscriptions.get(topic);
+    if (sub) {
+      sub.unsubscribe();
+      this.subscriptions.delete(topic);
+    }
+  }
 
 }
-
-
-
-
 
 // Singleton instance — import this anywhere
 export const wsService = new WebSocketService();

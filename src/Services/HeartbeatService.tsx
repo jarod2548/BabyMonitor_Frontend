@@ -10,6 +10,10 @@ export class HeartbeatService {
     if(!groupId) return;
     axios.post("/api/heartbeat", {data, groupId});
   }
+
+  heartbeatReceived (data : HeartbeatData) {
+    console.log(data);
+  }
 }
 
   export const heartbeatService = new HeartbeatService();
