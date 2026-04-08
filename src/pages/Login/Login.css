@@ -1,0 +1,101 @@
+/* Full-page container, centers content */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: #f0f4f8;
+}
+
+/* Login box: now container is almost full width */
+.login-container {
+  width: 100%;
+  max-width: 800px;  /* bigger max width for desktop */
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Title */
+.login-title {
+  margin-bottom: 30px;
+  font-size: 32px;
+  color: #333;
+}
+
+/* Form layout */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  width: 100%;
+  align-items: center;
+}
+
+/* Input fields: full width */
+.input-field {
+  width: 100%;           /* full container width */
+  max-width: 700px;      /* restrict extremely large screens */
+  padding: 18px 20px;    /* larger inputs */
+  font-size: 20px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  text-align: left;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
+}
+
+/* Submit button: match input width */
+.login-button {
+  width: 100%;
+  max-width: 700px;
+  padding: 18px 0;
+  font-size: 20px;
+  border-radius: 30px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #45a049;
+}
+
+/* Message below the form */
+.login-message {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Responsive: small screens */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 30px;
+    max-width: 95%;
+  }
+
+  .login-title {
+    font-size: 28px;
+  }
+
+  .input-field {
+    font-size: 18px;
+    padding: 16px 18px;
+  }
+
+  .login-button {
+    font-size: 18px;
+    padding: 16px 0;
+  }
+}

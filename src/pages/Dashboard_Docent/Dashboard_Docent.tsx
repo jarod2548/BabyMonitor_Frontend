@@ -6,8 +6,11 @@ import type { AcceleratieType } from "../../Enums/AcceleratieType";
 import type { HeartbeatData } from "../../contracts/HeartbeatData";
 import type { WeeData } from "../../contracts/WeeData";
 import CtgChart from "../../components/CtgChart/CtgChart";
+import { useLocation } from "react-router-dom";
 
 export default function Dashboard() {
+const location = useLocation();
+
     const [heartbeat, setHeartbeat] = useState<HeartbeatData>({
     aanpassingAantal: 20,
     tijdDuratie: 20,
@@ -99,7 +102,7 @@ useEffect(() => {
       groupService.leaveGroupOnUnload(); // sendBeacon
     }
   };
-}, [location.pathname]);
+}, [location]);
   
 
   return (

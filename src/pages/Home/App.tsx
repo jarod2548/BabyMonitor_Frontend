@@ -10,9 +10,13 @@ import { CreateGroupModal } from "./CreateGroupModal";
 import { JoinGroupModal } from "./JoinGroupModal";
 import type { maakGroepRequest } from "../../contracts/maakGroepRequest";
 import type { HeartbeatData } from "../../contracts/HeartbeatData";
+import { heartbeatService } from "../../Services/HeartbeatService";
+import Login from "../Login/Login";
+import { useAuth } from "./useAuth";
 
 function Home() {
   const navigate = useNavigate();
+  const loggedIn = useAuth();
 
   const [creationVisible, setCreationVisible] = useState(false);
   const [joinVisible, setJoinVisible] = useState(false);
@@ -48,16 +52,25 @@ function Home() {
       console.log(error);
     }
   };
+//
+  //const goToTeacherDev = () =>{
+//
+  //    navigate("/teacher");
+  //};
   
-  const heartbeatReceived = () => {
-
+  const heartbeatReceived = (data : HeartbeatData) => {
+    heartbeatService.heartbeatReceived(data);
   }
 
   const goToStudent = (groepId : string) => {
     console.log("Clicked group:", groepId);
-    localStorage.setItem("role", "student");
+    wsService.subscribe<HeartbeatData>(`/topic/heartbeat/${groepId}`, heartbeatReceived);
       navigate("/student");
   };
+
+  const goToLogin = () => {
+    navigate("/login")
+  }
 
 
 
@@ -67,6 +80,8 @@ function Home() {
       <div className="button-group">
         <button onClick={showCreateGroup}>Start een groep als docent</button>
         <button onClick={showJoinGroup}>Doe mee als student</button>
+        {loggedIn ? <p>Welcome</p> : <button onClick={goToLogin}>Login</button>
+        }
       </div>
 
       {creationVisible && <CreateGroupModal onClose={showCreateGroup} onCreateGroup={goToTeacher}/>}
@@ -86,6 +101,7 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/teacher" element={<Dashboard />} />
       <Route path="/student" element={<Student />} />
+      <Route path="/login" element={<Login />}/>
     </Routes>
   );
 }
