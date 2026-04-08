@@ -15,7 +15,6 @@
 
 /* Fix class name to match JSX */
 .CTGGrafiek {
-  border: 2px solid #999;
   padding: 20px;
   width: 100%;
   text-align: center;
@@ -26,6 +25,7 @@
   display: flex;
   gap: 24px;
   width: 100%;
+  margin-top: 25%;
   align-items: stretch; /* equal height panels */
 }
 
