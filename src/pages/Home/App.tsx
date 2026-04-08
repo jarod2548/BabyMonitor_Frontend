@@ -30,8 +30,8 @@ function Home() {
 
   const fetchGroepen = async () => {
     try {
-      const response = await groupService.getGroups();
-      setGroepen(response.data);
+      const response = await groupService.getFakeGroups();
+      setGroepen(response);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +76,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Welcome to Baby Monitor</h1>
+      <h1></h1>
       <div className="button-group">
         <button onClick={showCreateGroup}>Start een groep als docent</button>
         <button onClick={showJoinGroup}>Doe mee als student</button>
