@@ -13,6 +13,7 @@ import type { HeartbeatData } from "../../contracts/HeartbeatData";
 import { heartbeatService } from "../../Services/HeartbeatService";
 import Login from "../Login/Login";
 import { useAuth } from "./useAuth";
+import { ProtectedRoute } from "../../security/ProtectedRoute";
 
 function Home() {
   const navigate = useNavigate();
@@ -52,11 +53,7 @@ function Home() {
       console.log(error);
     }
   };
-//
-  //const goToTeacherDev = () =>{
-//
-  //    navigate("/teacher");
-  //};
+
   
   const heartbeatReceived = (data : HeartbeatData) => {
     heartbeatService.heartbeatReceived(data);
@@ -98,10 +95,33 @@ function Home() {
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/teacher" element={<Dashboard />} />
-      <Route path="/student" element={<Student />} />
-      <Route path="/login" element={<Login />}/>
+      <Route path="/" element={<Login />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/teacher"
+        element={
+          <ProtectedRoute role="TEACHER">
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/student"
+        element={
+          <ProtectedRoute role="STUDENT">
+            <Student />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/home"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   );
 }

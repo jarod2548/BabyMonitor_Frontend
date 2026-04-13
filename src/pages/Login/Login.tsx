@@ -1,6 +1,6 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import "./Login.css";
-import type { LoginDTO } from "../../contracts/LoginDTO";
+import type { LoginDTO } from "../../contracts/Account/LoginDTO";
 import { accountService } from "../../Services/AccountService";
 
 export default function Login() {
@@ -24,9 +24,17 @@ export default function Login() {
     if (!loginData.username || !loginData.password) {
       setMessage("Please fill in both fields!");
     } else {
-      accountService.Login(loginData);
+      login();
     }
   };
+
+  const login = async () => {
+    if(await accountService.Login(loginData)){
+      console.log("go to different page")
+    }else{
+      console.log("failed");
+    }
+};
 
   return (
     <div className="login-page">
