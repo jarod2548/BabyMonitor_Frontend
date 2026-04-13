@@ -1,16 +1,6 @@
-import {  Route, Routes, useNavigate } from "react-router-dom";
-import { wsService } from "../../WebSocketService";
+import { Route, Routes } from "react-router-dom";
 import Dashboard from "../Dashboard_Docent/Dashboard_Docent";
 import Student from "../Dashboard_Student/Dashboard_Student";
-import { groupService } from "../../Services/GroupService";
-import { useState } from "react";
-import './App.css';
-import type { Group } from "../../contracts/Group";
-import { CreateGroupModal } from "./CreateGroupModal";
-import { JoinGroupModal } from "./JoinGroupModal";
-import type { maakGroepRequest } from "../../contracts/maakGroepRequest";
-import type { HeartbeatData } from "../../contracts/HeartbeatData";
-import { heartbeatService } from "../../Services/HeartbeatService";
 import Login from "../Login/Login";
 import { ProtectedRoute } from "../../security/ProtectedRoute";
 import { useAuth } from "./useAuth";
@@ -92,6 +82,9 @@ function Home() {
     </div>
   );
 };
+import Home from "./Home";
+import Home_Docent from "./Home_Docent";
+
 function App() {
   return (
     <Routes>
@@ -122,10 +115,13 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/" element={<Home />} />
+      <Route path="/home_docent" element={<Home_Docent />} />
+      <Route path="/teacher" element={<Dashboard />} />
+      <Route path="/student" element={<Student />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }
 
 export default App;
-
-
