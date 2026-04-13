@@ -1,0 +1,13 @@
+.Home_Docent {
+  min-height: 100vh;
+  width: 100%;
+  padding: 2rem;
+  background-color: white;
+  font-family: Arial, sans-serif;
+}
+
+.Home_Docent h1 {
+  color: #111;
+  font-size: 2rem;
+}
+
