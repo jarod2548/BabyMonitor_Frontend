@@ -12,10 +12,12 @@ export const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
 
 
   if (!context?.user) {
+    console.error("no user found")
     return <Navigate to="/login" />;
   }
 
   if (role && context.user?.role !== role) {
+    console.error("no role found")
     return <Navigate to="/login" />;
   }
 
