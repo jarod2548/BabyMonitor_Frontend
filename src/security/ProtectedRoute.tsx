@@ -15,7 +15,7 @@ export const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
   }
 
   if (role && userRole !== role) {
-    return <Navigate to="/unauthorized" />;
+    return <Navigate to="/login" />;
   }
 
   return children;

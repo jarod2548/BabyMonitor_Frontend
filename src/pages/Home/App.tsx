@@ -12,8 +12,8 @@ import type { maakGroepRequest } from "../../contracts/maakGroepRequest";
 import type { HeartbeatData } from "../../contracts/HeartbeatData";
 import { heartbeatService } from "../../Services/HeartbeatService";
 import Login from "../Login/Login";
-import { useAuth } from "./useAuth";
 import { ProtectedRoute } from "../../security/ProtectedRoute";
+import { useAuth } from "./useAuth";
 
 function Home() {
   const navigate = useNavigate();

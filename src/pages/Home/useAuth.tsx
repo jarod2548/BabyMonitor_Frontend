@@ -8,7 +8,7 @@ export function useAuth() {
   useEffect(() => {
     const checkAuth = async () => {
         const response = await accountService.authorize();
-      setLoggedIn(response);
+      setLoggedIn(response != null);
     };
     checkAuth();
   }, []);

@@ -20,16 +20,22 @@ export class AccountService{
 
     async Registratie(account : LoginDTO){
         
-        await axios.post("/api/register", account);
+        const response : LoginResponseDTO = await axios.post("/api/register", account);
+        localStorage.setItem("name", response.username);
+        localStorage.setItem("role", response.role);
     }
 
-    async authorize() : Promise<LoginResponseDTO | null>{
+    async authorize() : Promise<boolean>{
         try {
-            const response = await axios.get("/api/account/auth");
-            return response.data;
+            const response : LoginResponseDTO = await axios.get("/api/account/auth");
+            localStorage.setItem("name", response.username);
+            localStorage.setItem("role", response.role);
+            return true;
         } catch (error) {
             console.log(error)
-            return null;
+            localStorage.removeItem("name");
+            localStorage.removeItem("role");
+            return false;
         }
         
     }
