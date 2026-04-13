@@ -2,8 +2,14 @@ import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import "./Login.css";
 import type { LoginDTO } from "../../contracts/Account/LoginDTO";
 import { accountService } from "../../Services/AccountService";
+import type { LoginResponseDTO } from "../../contracts/Account/LoginResponseDTO";
+import { useAuth } from "../../authorization/useAuth";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const context = useAuth();
+  const navigate = useNavigate();
+
   const [message, setMessage] = useState<string>("");
 
   const [loginData, setLoginData] = useState<LoginDTO>({
@@ -29,10 +35,11 @@ export default function Login() {
   };
 
   const login = async () => {
-    if(await accountService.Login(loginData)){
-      console.log("go to different page")
-    }else{
-      console.log("failed");
+    const user : LoginResponseDTO | null =  await accountService.Login(loginData);
+    if(user != null){
+      context?.setUser(user);
+      console.log("user found, changing pages");
+      navigate("/home");
     }
 };
 

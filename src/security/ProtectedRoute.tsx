@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import type { ReactNode } from "react";
+import { useAuth } from "../authorization/useAuth";
 
 type ProtectedRouteProps = {
   children: ReactNode;
@@ -7,14 +8,14 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
-  const token = localStorage.getItem("token");
-  const userRole = localStorage.getItem("role");
+  const context = useAuth();
 
-  if (!token) {
+
+  if (!context?.user) {
     return <Navigate to="/login" />;
   }
 
-  if (role && userRole !== role) {
+  if (role && context.user?.role !== role) {
     return <Navigate to="/login" />;
   }
 
