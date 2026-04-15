@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { HomeDocentAction } from "./Home_Docent";
 import Home_Student from "./Home_Student";
-import { useAuth } from "./useAuth";
+import { useAuth } from "../../authorization/useAuth";
+
 
 function Home() {
   const navigate = useNavigate();
-  const loggedIn = useAuth();
+  const context = useAuth();
 
   const goToLogin = () => {
     navigate("/login");
@@ -17,7 +18,7 @@ function Home() {
       <div className="button-group">
         <HomeDocentAction embedded />
         <Home_Student embedded />
-        {loggedIn ? <p>Welcome</p> : <button onClick={goToLogin}>Login</button>}
+        {context?.user ? <p>Welcome</p> : <button onClick={goToLogin}>Login</button>}
       </div>
     </div>
   );
