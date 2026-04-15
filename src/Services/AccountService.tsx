@@ -5,6 +5,13 @@ import type { LoginResponseDTO } from "../contracts/Account/LoginResponseDTO";
 
 export class AccountService{
 
+    validateLogin(data : LoginDTO) {
+    if (!data.username || !data.password) {
+        return "Please fill in both fields!";
+        }
+        return null;
+    }
+
     async Login(login : LoginDTO): Promise<LoginResponseDTO | null>{
         console.log(login);
         try{
