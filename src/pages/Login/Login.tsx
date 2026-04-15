@@ -38,7 +38,7 @@ export default function Login() {
     const user : LoginResponseDTO | null =  await accountService.Login(loginData);
     if(user != null){
       context?.setUser(user);
-      console.log("user found, changing pages");
+      console.log("ProtectedRoute user:", context?.user);
       navigate("/home");
     }
 };

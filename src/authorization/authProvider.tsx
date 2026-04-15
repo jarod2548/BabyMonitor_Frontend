@@ -13,7 +13,7 @@
 
   const setUser = (u: LoginResponseDTO | null) => {
     setUserState(u);
-
+    console.log("ProtectedRoute user:", u);
     if (u) {
       localStorage.setItem("user", JSON.stringify(u));
     } else {
