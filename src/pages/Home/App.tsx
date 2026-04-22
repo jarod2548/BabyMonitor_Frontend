@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "../Dashboard_Docent/Dashboard_Docent";
 import Student from "../Dashboard_Student/Dashboard_Student";
 import Login from "../Login/Login";
+import Register from "../Register/Register";
 import Home from "./Home";
 import Home_Docent from "./Home_Docent";
 import Layout from "../../layout";
@@ -13,6 +14,7 @@ function App() {
       {/* Public routes */}
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* Protected routes WITH layout */}
       <Route element={<Layout />}>

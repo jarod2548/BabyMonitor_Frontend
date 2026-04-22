@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { LoginDTO } from "../contracts/Account/LoginDTO";
 import type { LoginResponseDTO } from "../contracts/Account/LoginResponseDTO";
+import type { RegisterDTO } from "../contracts/Account/RegisterDTO";
 ;
 
 export class AccountService{
@@ -21,12 +22,21 @@ export class AccountService{
         
     }
 
-    async Registratie(account : LoginDTO){
-        
-        const response : LoginResponseDTO = await axios.post("/api/acccount", account);
-        localStorage.setItem("name", response.username);
-        localStorage.setItem("role", response.role);
-    }
+    async Registratie(account: RegisterDTO): Promise<LoginResponseDTO | null> {
+        try {
+          const response = await axios.post("/api/account/register", account);
+
+          if (response.status === 200 || response.status === 201) {
+            const responseData: LoginResponseDTO = response.data;
+            return responseData;
+          }
+
+          return null;
+        } catch (error) {
+          console.log(error);
+          return null;
+        }
+      }
 
     async authorize() : Promise<LoginResponseDTO | null> {
         try {
