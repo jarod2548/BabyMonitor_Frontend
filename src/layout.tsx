@@ -1,4 +1,6 @@
-function Layout({ children }: React.PropsWithChildren) {
+import { Outlet } from "react-router-dom";
+
+function Layout() {
   return (
     <>
       {/* Global Banner */}
@@ -17,7 +19,7 @@ function Layout({ children }: React.PropsWithChildren) {
 
       {/* Page content */}
       <div style={{ marginTop: "50px" }}>
-        {children}
+        <Outlet />
       </div>
     </>
   );
