@@ -28,11 +28,16 @@ export class AccountService{
         
     }
 
-    async Registratie(account : LoginDTO){
+    async Registratie(account : LoginDTO) : Promise<boolean>{
         
-        const response : LoginResponseDTO = await axios.post("/api/acccount", account);
-        localStorage.setItem("name", response.username);
-        localStorage.setItem("role", response.role);
+        try{
+            await axios.post("/api/acccount", account);
+            return true;
+        }
+        catch(error){
+            return false
+        }
+        
     }
 
     async authorize() : Promise<LoginResponseDTO | null> {
