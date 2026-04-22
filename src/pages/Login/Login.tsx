@@ -27,9 +27,11 @@ export default function Login() {
 
   const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    if (!loginData.username || !loginData.password) {
-      setMessage("Please fill in both fields!");
-    } else {
+    const error = accountService.validateLogin(loginData);
+    if(error){
+      setMessage(error);
+    }
+    else{
       login();
     }
   };
@@ -38,7 +40,6 @@ export default function Login() {
     const user : LoginResponseDTO | null =  await accountService.Login(loginData);
     if(user != null){
       context?.setUser(user);
-      console.log("ProtectedRoute user:", context?.user);
       navigate("/home");
     }
 };
