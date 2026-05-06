@@ -6,6 +6,8 @@ import Register from "../Register/Register";
 import Home from "./Home";
 import Home_Docent from "./Home_Docent";
 import Layout from "../../layout";
+import Classes from "../Classes/Classes";
+import Lessons from "../Courses/Courses";
 import { ProtectedRoute } from "../../security/ProtectedRoute";
 
 function App() {
@@ -36,6 +38,22 @@ function App() {
           }
         />
 
+        <Route
+          path="/classes"
+          element={
+            <ProtectedRoute role="USER">
+              <Classes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/lessons"
+          element={
+            <ProtectedRoute role="USER">
+              <Lessons />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/student"
           element={

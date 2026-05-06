@@ -1,0 +1,56 @@
+import { useState, type ChangeEvent, type SyntheticEvent } from "react";
+import type { CourseDTO } from "../../../contracts/Course/CourseDTO";
+import { courseService } from "../../../Services/CourseService";
+
+export default function CreateLessons() {
+  // Initialize state with the shape of VraagDTO
+  const [courseData, setCourseData] = useState<CourseDTO>({
+    titel: ""
+    // Add other fields from VraagDTO here
+  });
+  const [message, setMessage] = useState<string>("");
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCourseData(prev => ({ ...prev, titel : e.target.value }));
+  };
+
+ const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+
+    const error = courseService.validateCourse(courseData);
+
+    if (error) {
+      setMessage(error);
+    } else {
+      saveCourse();
+    }
+  };
+
+  const saveCourse = async () => {
+    courseService.maakCourse(courseData);
+  }
+
+  return (
+    <div>
+       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '300px' }}>
+      <h2>Maak een nieuwe course</h2>
+      
+      <label>
+        Titel:
+        <input 
+          type="text" 
+          name="titel" 
+          value={courseData.titel} 
+          onChange={handleChange} 
+          required 
+        />
+      </label>
+
+      <button type="submit">Sla Course op</button>
+    </form>
+     {message && <p className="login-message">{message}</p>} 
+    </div>
+   
+    
+  );
+}

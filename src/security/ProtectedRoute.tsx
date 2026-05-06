@@ -17,7 +17,11 @@ export const ProtectedRoute = ({ children, role }: ProtectedRouteProps) => {
   }
 
   if (role && context.user?.role !== role) {
-    console.error("no role found")
+    console.log({
+  contextUser: context?.user,
+  requiredRole: role,
+  match: context?.user?.role === role
+});
     return <Navigate to="/login" />;
   }
 
