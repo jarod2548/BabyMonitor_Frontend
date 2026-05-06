@@ -6,6 +6,11 @@ import type { RegisterDTO } from "../contracts/Account/RegisterDTO";
 
 export class AccountService{
 
+    validateLogin(data : LoginDTO){
+        console.log(data);
+        return null
+        }
+
     async Login(login : LoginDTO): Promise<LoginResponseDTO | null>{
         console.log(login);
         try{
@@ -48,6 +53,8 @@ export class AccountService{
             return null;
         }   
     }
+
+
 }
 
 export const accountService = new AccountService();
