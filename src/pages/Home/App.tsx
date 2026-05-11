@@ -6,7 +6,12 @@ import Register from "../Register/Register";
 import Home from "./Home";
 import Home_Docent from "./Home_Docent";
 import Layout from "../../layout";
+import Classes from "../Classes/Classes";
+import Lessons from "../Courses/Courses";
+import CreateLessons from "../Teacher/CreateCourses/CreateCourses";
 import { ProtectedRoute } from "../../security/ProtectedRoute";
+import CreateVragen from "../Teacher/CreateVragen/CreateVragen";
+import Course from "../Course/Course";
 
 function App() {
   return (
@@ -21,7 +26,7 @@ function App() {
         <Route
           path="/teacher"
           element={
-            <ProtectedRoute role="TEACHER">
+            <ProtectedRoute roles={["Teacher"]}>
               <Dashboard />
             </ProtectedRoute>
           }
@@ -30,20 +35,63 @@ function App() {
         <Route
           path="/home_docent"
           element={
-            <ProtectedRoute role="TEACHER">
+            <ProtectedRoute roles={["TEACHER"]}>
               <Home_Docent />
             </ProtectedRoute>
           }
         />
 
         <Route
+          path="/create_courses"
+          element={
+            <ProtectedRoute roles={["TEACHER"]}>
+              <CreateLessons />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create_vragen/:id"
+          element={
+            <ProtectedRoute roles={["TEACHER"]}>
+              <CreateVragen />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/classes"
+          element={
+            <ProtectedRoute roles={["TEACHER", "USER"]}>
+              <Classes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/lessons"
+          element={
+            <ProtectedRoute roles={["TEACHER", "USER"]}>
+              <Lessons />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/student"
           element={
-            <ProtectedRoute role="USER">
+            <ProtectedRoute roles={["TEACHER", "USER"]}>
               <Student />
             </ProtectedRoute>
           }
         />
+        <Route path="/course">
+          <Route
+            path=":id"
+            element={
+            <ProtectedRoute roles={["USER", "TEACHER"]}>
+              <Course />
+            </ProtectedRoute>
+            }
+          />
+        </Route>
 
         <Route
           path="/home"

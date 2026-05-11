@@ -1,0 +1,52 @@
+import type { ctgData } from "../contracts/ctgData";
+import type { CtgPoint } from "../contracts/ctgpoint";
+
+class CtgGeneratorService {
+  private static instance: CtgGeneratorService;
+
+  private constructor() {}
+
+  public static getInstance(): CtgGeneratorService {
+    if (!CtgGeneratorService.instance) {
+      CtgGeneratorService.instance = new CtgGeneratorService();
+    }
+    return CtgGeneratorService.instance;
+  }
+
+  // voor het inladen van alle punten in een keer
+  public generatePoints(data : ctgData): CtgPoint[] {
+    const points: CtgPoint[] = [];
+    
+    const totalPoints = data.minuten * 4;
+
+    for (let i = 0; i < totalPoints; i++) {
+      
+      const randomOffset = (Math.random() - 0.5) * 2 * data.variabiliteit;
+      const fhrBpm = Math.round(data.hartBasis + randomOffset);
+      
+      const toco = Math.round(20 + Math.sin(i / 10) * 15);
+
+      points.push({
+        timestamp: 1,
+        fhrBpm: fhrBpm,
+        toco: toco
+      });
+    }
+
+    return points;
+  }
+
+  //voor een flow van punten die over tijd worden ingeladen
+  public generateNextPoint(data : ctgData, lastToco : number, time : number): CtgPoint {
+    const randomOffset = (Math.random() - 0.5) * 2 * data.variabiliteit;
+    
+    return {
+      timestamp: time + 1,
+      fhrBpm: Math.round(data.hartBasis + randomOffset),
+      // Slowly drift TOCO up and down for realism
+      toco: Math.max(10, Math.min(100, lastToco + (Math.random() - 0.5) * 5))
+    };
+  }
+}
+
+export const ctgService = CtgGeneratorService.getInstance();

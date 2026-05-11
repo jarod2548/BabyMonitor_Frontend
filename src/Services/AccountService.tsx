@@ -6,10 +6,12 @@ import type { RegisterDTO } from "../contracts/Account/RegisterDTO";
 
 export class AccountService{
 
-    validateLogin(data : LoginDTO){
-        console.log(data);
-        return null
+    validateLogin(data : LoginDTO) {
+    if (!data.email || !data.password) {
+        return "Please fill in both fields!";
         }
+        return null;
+    }
 
     async Login(login : LoginDTO): Promise<LoginResponseDTO | null>{
         console.log(login);

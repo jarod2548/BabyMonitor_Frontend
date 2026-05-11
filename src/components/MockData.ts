@@ -1,6 +1,5 @@
-import type { CtgPoint } from "../contracts/ctg";
+import type { CtgPoint } from "../contracts/ctgpoint";
 
-  const POINT_INTERVAL_MS = 5_000;
   const DEFAULT_POINT_COUNT = 72;
 
   const clamp = (value: number, min: number, max: number) =>
@@ -8,9 +7,7 @@ import type { CtgPoint } from "../contracts/ctg";
 
   export function generateMockCtgData(
     pointCount = DEFAULT_POINT_COUNT,
-    startTime = new Date(),
   ): CtgPoint[] {
-    const startTimestamp = startTime.getTime() - pointCount * POINT_INTERVAL_MS;
 
     return Array.from({ length: pointCount }, (_, index) => {
       const wave = index / 6;
@@ -32,7 +29,7 @@ import type { CtgPoint } from "../contracts/ctg";
       );
 
       return {
-        timestamp: new Date(startTimestamp + index * POINT_INTERVAL_MS).toISOString(),
+        timestamp: 1,
         fhrBpm,
         toco,
       };
