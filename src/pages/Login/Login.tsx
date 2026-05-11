@@ -13,12 +13,12 @@ export default function Login() {
   const [message, setMessage] = useState<string>("");
 
   const [loginData, setLoginData] = useState<LoginDTO>({
-    username: "",
+    email: "",
     password : ""
   })
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    setLoginData(prev => ({...prev , username : e.target.value}));
+    setLoginData(prev => ({...prev , email : e.target.value}));
   };
 
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -52,7 +52,7 @@ export default function Login() {
           <input
             type="text"
             placeholder="Name"
-            value={loginData.username}
+            value={loginData.email}
             onChange={handleNameChange}
             className="pill input-field"
           />

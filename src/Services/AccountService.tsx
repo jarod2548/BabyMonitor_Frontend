@@ -1,12 +1,13 @@
 import axios from "axios";
 import type { LoginDTO } from "../contracts/Account/LoginDTO";
 import type { LoginResponseDTO } from "../contracts/Account/LoginResponseDTO";
+import type { RegisterDTO } from "../contracts/Account/RegisterDTO";
 ;
 
 export class AccountService{
 
     validateLogin(data : LoginDTO) {
-    if (!data.username || !data.password) {
+    if (!data.email || !data.password) {
         return "Please fill in both fields!";
         }
         return null;
@@ -28,17 +29,21 @@ export class AccountService{
         
     }
 
-    async Registratie(account : LoginDTO) : Promise<boolean>{
-        
-        try{
-            await axios.post("/api/acccount", account);
-            return true;
+    async Registratie(account: RegisterDTO): Promise<LoginResponseDTO | null> {
+        try {
+          const response = await axios.post("/api/account/register", account);
+
+          if (response.status === 200 || response.status === 201) {
+            const responseData: LoginResponseDTO = response.data;
+            return responseData;
+          }
+
+          return null;
+        } catch (error) {
+          console.log(error);
+          return null;
         }
-        catch(error){
-            return false
-        }
-        
-    }
+      }
 
     async authorize() : Promise<LoginResponseDTO | null> {
         try {
@@ -50,6 +55,8 @@ export class AccountService{
             return null;
         }   
     }
+
+
 }
 
 export const accountService = new AccountService();
