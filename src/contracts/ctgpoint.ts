@@ -1,7 +1,7 @@
 export type IsoTimestamp = string;
 
 export type CtgPoint = {
-    timestamp: IsoTimestamp;
+    timestamp: number;
     fhrBpm: number;
     toco: number;
 };

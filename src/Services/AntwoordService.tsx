@@ -6,7 +6,7 @@ export class AntwoordService{
 
     async maakAntwoord(data : AntwoordDTO){
         try{
-            const response = await axios.post("/api/teacher/vraag", data);
+            const response = await axios.post("/api/teacher/antwoord", data);
             if(response.status === 201){
                 const responseData : AntwoordReponseDTO = response.data;
                 return responseData;
@@ -19,18 +19,18 @@ export class AntwoordService{
         }
     }
 
-    async leesAntwoorden(){
+    async leesAntwoorden(courseID : number){
         try{
-            const response = await axios.get("/api/teacher/vraag");
+            const response = await axios.get(`/api/user/antwoord${courseID}`);
             if(response.status === 200){
                 const responseData : AntwoordReponseDTO[] = response.data;
                 return responseData;
             }
-            return null;
+            return [];
         }
         catch(error){
             console.log(error);
-            return null;
+            return [];
         }
     }
 

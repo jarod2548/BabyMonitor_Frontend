@@ -1,9 +1,11 @@
 import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import type { CourseDTO } from "../../../contracts/Course/CourseDTO";
 import { courseService } from "../../../Services/CourseService";
+import { useNavigate } from "react-router-dom";
+import type { CourseReponseDTO } from "../../../contracts/Course/CourseResponseDTO";
 
 export default function CreateLessons() {
-  // Initialize state with the shape of VraagDTO
+  const navigate = useNavigate();
   const [courseData, setCourseData] = useState<CourseDTO>({
     titel: ""
     // Add other fields from VraagDTO here
@@ -27,7 +29,14 @@ export default function CreateLessons() {
   };
 
   const saveCourse = async () => {
-    courseService.maakCourse(courseData);
+    const result : CourseReponseDTO | null = await courseService.maakCourse(courseData);
+    if(result != null){
+      navigate(`/create_vragen/${result.courseID}`);
+    }
+    else {
+    setMessage("Fout bij het aanmaken van de cursus.");
+    }
+    
   }
 
   return (

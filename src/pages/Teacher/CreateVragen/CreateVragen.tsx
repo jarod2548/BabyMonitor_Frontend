@@ -1,11 +1,14 @@
 import { useState, type SyntheticEvent } from "react";
 import type { VraagDTO } from "../../../contracts/Course/VraagDTO";
 import { vraagService } from "../../../Services/VraagService";
+import { useParams } from "react-router-dom";
 
 export default function CreateVragen() {
+    const id = useParams<{ id: string }>();
+    
   const [vraagData, setVraagData] = useState<VraagDTO>({
     tekst : "",
-    courseID: 0,
+    courseID: Number(id),
   });
   const [message, setMessage] = useState<string>("");
 

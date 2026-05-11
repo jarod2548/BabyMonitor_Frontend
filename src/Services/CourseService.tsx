@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { CourseReponseDTO } from "../contracts/Course/CourseResponseDTO";
 import type { CourseDTO } from "../contracts/Course/CourseDTO";
 
 export class CourseService{
@@ -7,7 +8,7 @@ export class CourseService{
         try{
             const response = await axios.post("/api/teacher/course", data);
             if(response.status === 201){
-                const responseData : CourseDTO = response.data;
+                const responseData : CourseReponseDTO = response.data;
                 return responseData;
             }else{
                 return null;
@@ -20,9 +21,24 @@ export class CourseService{
 
     async leesCourses(){
         try{
-            const response = await axios.get("/api/teacher/courses");
-            if(response.status === 201){
+            const response = await axios.get("/api/user/courses");
+            if(response.status === 200){
                 const responseData : CourseDTO[] = response.data;
+                return responseData;
+            }
+            return null;
+        }
+        catch(error){
+            console.log(error);
+            return null;
+        }
+    }
+
+    async leesCourse(courseID : number){
+        try{
+            const response = await axios.get(`/api/user/course${courseID}`);
+            if(response.status === 200){
+                const responseData : CourseDTO = response.data;
                 return responseData;
             }
             return null;
