@@ -37,16 +37,19 @@ class CtgGeneratorService {
   }
 
   //voor een flow van punten die over tijd worden ingeladen
-  public generateNextPoint(data : ctgData, lastToco : number, time : number): CtgPoint {
-    const randomOffset = (Math.random() - 0.5) * 2 * data.variabiliteit;
-    
-    return {
-      timestamp: time + 1,
-      fhrBpm: Math.round(data.hartBasis + randomOffset),
-      // Slowly drift TOCO up and down for realism
-      toco: Math.max(10, Math.min(100, lastToco + (Math.random() - 0.5) * 5))
-    };
-  }
+  public generateNextPoint(
+  data: ctgData,
+  lastToco: number,
+  index: number
+): CtgPoint {
+  const randomOffset = (Math.random() - 0.5) * 2 * data.variabiliteit;
+
+  return {
+    timestamp: index, // now it's just index
+    fhrBpm: Math.round(data.hartBasis + randomOffset),
+    toco: Math.max(10, Math.min(100, lastToco + (Math.random() - 0.5) * 5))
+  };
+}
 }
 
 export const ctgService = CtgGeneratorService.getInstance();
