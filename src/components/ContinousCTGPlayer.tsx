@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CtgPoint } from "../contracts/ctgpoint";
 import { ctgService } from "../Services/CTGGeneratorService";
 import CtgChart from "./CtgChart/CtgChart";
@@ -14,32 +14,37 @@ export default function ContinuousCTGPlayer({
   speed = 500,
 }: Props) {
   const windowSize = 50;
+  const indexRef = useRef(windowSize);
+  
 
-  const [points, setPoints] = useState<CtgPoint[]>(() => {
-    return Array.from({ length: windowSize }).map((_, i) => ({
-      timestamp: i,
-      fhrBpm: ctgData.hartBasis,
-      toco: 20,
-    }));
-  });
+  // holds real start time (set inside useEffect)
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setPoints((prevData) => {
-        const lastToco = prevData[prevData.length - 1]?.toco || 20;
+  const [points, setPoints] = useState<CtgPoint[]>(() =>
+  Array.from({ length: windowSize }).map((_, i) => ({
+    timestamp: i,
+    fhrBpm: ctgData.hartBasis,
+    toco: 20,
+  }))
+);
 
-        const nextPoint = ctgService.generateNextPoint(
-          ctgData,
-          lastToco,
-          prevData[prevData.length - 1]?.timestamp ?? 0
-        );
+useEffect(() => {
 
-        return [...prevData.slice(1), nextPoint];
-      });
-    }, speed);
+  const interval = setInterval(() => {
+    setPoints((prev) => {
+      const lastToco = prev[prev.length - 1]?.toco ?? 20;
 
-    return () => clearInterval(interval);
-  }, [speed, ctgData]);
+      const nextPoint = ctgService.generateNextPoint(
+        ctgData,
+        lastToco,
+        indexRef.current++
+      );
+
+      return [...prev.slice(1), nextPoint];
+    });
+  }, speed);
+
+  return () => clearInterval(interval);
+}, [speed, ctgData]);
 
   return <CtgChart data={points} isAnimationActive={false} />;
 }
