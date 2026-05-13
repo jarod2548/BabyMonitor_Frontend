@@ -49,14 +49,16 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/create_vragen/:id"
+        <Route path="/create_vragen">
+          <Route
+            path=":id"
           element={
             <ProtectedRoute roles={["TEACHER"]}>
               <CreateVragen />
             </ProtectedRoute>
           }
-        />
+          />
+        </Route>
 
         <Route
           path="/classes"
