@@ -1,0 +1,78 @@
+.mmc-page {
+  min-height: 100vh;
+  background: #f2fbfd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.mmc-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 32px;
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(31, 35, 80, 0.18);
+  border-top: 8px solid #8bd3e6;
+}
+
+.mmc-card h2 {
+  margin: 0 0 24px;
+  color: #24245c;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.mmc-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mmc-form label {
+  color: #24245c;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mmc-form input {
+  padding: 13px 14px;
+  border: 2px solid #cdeff6;
+  border-radius: 3px;
+  font-size: 16px;
+  outline: none;
+}
+
+.mmc-form input:focus {
+  border-color: #39a9cf;
+  box-shadow: 0 0 0 3px rgba(57, 169, 207, 0.18);
+}
+
+.mmc-form button {
+  margin-top: 8px;
+  background: #7cc8dc;
+  color: white;
+  border: none;
+  padding: 14px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.mmc-form button:hover {
+  background: #39a9cf;
+}
+
+.login-message {
+  margin-top: 18px;
+  color: #24245c;
+  background: #e6f7fb;
+  border-left: 5px solid #39a9cf;
+  padding: 12px;
+  font-weight: 600;
+}

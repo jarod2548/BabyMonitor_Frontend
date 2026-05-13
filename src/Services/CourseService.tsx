@@ -19,20 +19,21 @@ export class CourseService{
         }
     }
 
-    async leesCourses(){
-        try{
-            const response = await axios.get("/api/user/courses");
-            if(response.status === 200){
-                const responseData : CourseDTO[] = response.data;
-                return responseData;
-            }
-            return null;
-        }
-        catch(error){
-            console.log(error);
-            return null;
-        }
+async leesCourses() {
+  try {
+    const response = await axios.get("/api/user/courses");
+
+    if (response.status === 200) {
+      const responseData: CourseReponseDTO[] = response.data;
+      return responseData;
     }
+
+    return null;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
 
     async leesCourse(courseID : number){
         try{

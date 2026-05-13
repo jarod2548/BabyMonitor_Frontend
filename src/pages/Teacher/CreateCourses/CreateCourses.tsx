@@ -3,7 +3,7 @@ import type { CourseDTO } from "../../../contracts/Course/CourseDTO";
 import { courseService } from "../../../Services/CourseService";
 import { useNavigate } from "react-router-dom";
 import type { CourseReponseDTO } from "../../../contracts/Course/CourseResponseDTO";
-
+import "./CreateCourses.css";
 export default function CreateLessons() {
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState<CourseDTO>({
@@ -39,27 +39,28 @@ export default function CreateLessons() {
     
   }
 
-  return (
-    <div>
-       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '300px' }}>
+return (
+  <div className="mmc-page">
+    <div className="mmc-card">
       <h2>Maak een nieuwe course</h2>
-      
-      <label>
-        Titel:
-        <input 
-          type="text" 
-          name="titel" 
-          value={courseData.titel} 
-          onChange={handleChange} 
-          required 
-        />
-      </label>
 
-      <button type="submit">Sla Course op</button>
-    </form>
-     {message && <p className="login-message">{message}</p>} 
+      <form onSubmit={handleSubmit} className="mmc-form">
+        <label>
+          Titel
+          <input
+            type="text"
+            name="titel"
+            value={courseData.titel}
+            onChange={handleChange}
+            required
+          />
+        </label>
+
+        <button type="submit">Sla Course op</button>
+      </form>
+
+      {message && <p className="login-message">{message}</p>}
     </div>
-   
-    
-  );
+  </div>
+);
 }
