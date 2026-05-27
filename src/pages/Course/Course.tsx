@@ -15,7 +15,16 @@ export default function Course() {
   const [antwoorden, setAntwoorden] =  useState<AntwoordReponseDTO[]>([])
   const [currentVraag, setCurrentVraag] = useState<VraagReponseDTO | null>(null);
   const [page, setPage] = useState(0);
+  const baseSpeed = 500; // 1x speed equals 500ms delay
+  const [multiplier, setMultiplier] = useState(1);
   const [ctgSpeed, setCTGSpeed] = useState(500);
+
+  const speedOptions = [0.5, 1, 1.5, 2, 4];
+
+  const handleSpeedChange = (m: number) => {
+    setMultiplier(m);
+    setCTGSpeed(baseSpeed / m); // e.g. 2x speed = 250ms delay
+  };
 
 
   const chooseAwnser = (id : number) => {
@@ -35,7 +44,12 @@ useEffect(() => {
   const fetchAntwoorden = async () => {
     try {
       //const antwoordResult = await antwoordService.leesAntwoorden(id);
-      setAntwoorden([]);
+      const mockAntwoorden: AntwoordReponseDTO[] = [
+      { tekst: "Optie A", antwoordID: 1 },
+      { tekst: "Optie B", antwoordID: 2 },
+      { tekst: "Optie C", antwoordID: 3 }
+    ];
+    setAntwoorden(mockAntwoorden);
     } catch (err) {
       console.error("Falen bij het ophalen van antwoorden", err);
     }
@@ -96,22 +110,20 @@ if (!currentVraag?.ctgData) {
 
     {/* BOTTOM */}
     <div className="nav-container">
-
-      <div className="speed-control">
-        <label>CTG Speed (ms):</label>
-
-        <input
-        type="number"
-        value={ctgSpeed}
-        onChange={(e) => setCTGSpeed(Number(e.target.value))}
-        min={100}
-        step={50}
-        />
-
-        <button onClick={() => setCTGSpeed(ctgSpeed)}>
-          Set Speed
-        </button>
-      </div>
+        <div className="speed-control">
+          <label>Playback Speed:</label>
+          <div className="speed-buttons">
+            {speedOptions.map((opt) => (
+              <button
+                key={opt}
+                className={multiplier === opt ? "active" : ""}
+                onClick={() => handleSpeedChange(opt)}
+              >
+                {opt}x
+              </button>
+            ))}
+          </div>
+        </div>
 
       <button onClick={handleNext}>
         Volgende Vraag
