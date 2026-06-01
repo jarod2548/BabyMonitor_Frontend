@@ -1,0 +1,121 @@
+.classesPage {
+    padding: 24px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Force readable text inside this page even if global dark-mode exists */
+.classesPage,
+.classesPage * {
+    color: #111827 !important;
+}
+
+.title {
+    margin: 0 0 14px 0;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.joinRow {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.input {
+    width: 320px;
+    height: 40px;
+    border-radius: 10px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #111827 !important;
+}
+
+.input::placeholder {
+    color: #6b7280 !important;
+}
+
+.button {
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 10px;
+    border: none;
+    background: #111827;
+    color: #ffffff !important;
+    /* keep button text white for contrast */
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.buttonGhost {
+    height: 34px;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    cursor: pointer;
+}
+
+.section {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sectionTitle {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.listItem {
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.listTitle {
+    font-weight: 700;
+}
+
+.listMeta {
+    margin-top: 2px;
+    font-size: 12px;
+    color: #374151 !important;
+}
+
+.muted {
+    color: #374151 !important;
+    font-size: 14px;
+}
+
+.error {
+    padding: 10px 12px;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    border-radius: 12px;
+    color: #991b1b !important;
+    margin-bottom: 10px;
+}
