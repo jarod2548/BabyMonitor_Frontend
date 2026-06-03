@@ -7,14 +7,12 @@ export class AntwoordService{
     async maakAntwoord(data : AntwoordDTO[]){
         try{
             const response = await axios.post("/api/teacher/antwoord", data);
-
-            if(response.status === 200){
+            if(response.status === 201){
                 const responseData : AntwoordReponseDTO = response.data;
                 return responseData;
             }else{
                 return null;
             }
-
         }catch(error){
             console.log(error);
             return null;
@@ -23,39 +21,29 @@ export class AntwoordService{
 
     async leesAntwoorden(courseID : number){
         try{
-            const response =
-                await axios.get(`/api/course/${courseID}/antwoorden`);
-
+            const response = await axios.get(`/api/user/antwoord${courseID}`);
             if(response.status === 200){
                 const responseData : AntwoordReponseDTO[] = response.data;
                 return responseData;
             }
-
             return [];
-
-        } catch(error){
-
+        }
+        catch(error){
             console.log(error);
             return [];
         }
     }
 
     validateAntwoord(data: AntwoordDTO[]): string[] {
+    const errors: string[] = [];
 
-        const errors: string[] = [];
+    data.forEach((item, index) => {
+        if (!item.tekst || item.tekst.trim() === "") {
+            errors.push(`Antwoord op positie ${index + 1} mist tekst.`);
+        }
+    });
 
-        data.forEach((item, index) => {
-
-            if (!item.tekst || item.tekst.trim() === "") {
-
-                errors.push(
-                    `Antwoord op positie ${index + 1} mist tekst.`
-                );
-            }
-        });
-
-        return errors;
-    }
+    return errors; // Returns an empty array if everything is valid
 }
-
-export const antwoordService = new AntwoordService();
+}
+export const antwoordService = new AntwoordService(); 
