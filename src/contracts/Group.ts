@@ -1,4 +1,4 @@
-export type Group = {
-    groepId : string;
+export type GroupResponse = {
+    id : string;
     naam : string;
 } 

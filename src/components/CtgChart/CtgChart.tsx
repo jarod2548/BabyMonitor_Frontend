@@ -1,47 +1,76 @@
-  import {CartesianGrid,Legend,Line,LineChart,ResponsiveContainer,Tooltip,XAxis,YAxis,} from "recharts";
-  import "./CtgChart.css";
-  import { mockCtgData } from "../MockData";
-  import type { CtgPoint } from "../../contracts/ctgpoint";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-  type CtgChartProps = {data?: CtgPoint[];isAnimationActive?: boolean;};
+import "./CtgChart.css";
+import type { CtgPoint } from "../../contracts/ctgpoint";
 
-  const formatTimestamp = (timestamp: string) =>new Date(timestamp).toLocaleTimeString([], {hour: "2-digit",minute: "2-digit",});
+type Props = {
+  data: CtgPoint[];
+};
 
-  const formatMMSS = (value: number) => {
-  const seconds = value * 2; // optional scaling (depends on speed)
+function CtgChart({ data }: Props) {
+  return (
+    <div className="ctg-chart">
+      {/* FHR (top) */}
+      <ResponsiveContainer width="100%" height={260}>
+        <LineChart data={data}>
+          <CartesianGrid stroke="#1b2f1b" strokeDasharray="3 3" />
 
-  const minutes = Math.floor(seconds / 60);
-  const sec = seconds % 60;
+          <XAxis dataKey="x" type="number" hide />
 
-  return `${minutes}.${sec.toString().padStart(2, "0")}`;
+          <YAxis
+            domain={[50, 210]}
+            ticks={[60, 90, 120, 150, 180, 210]}
+            stroke="#666"
+          />
+
+          <Tooltip contentStyle={{ backgroundColor: "#0b0f0b", border: "1px solid #1b2f1b" }} />
+
+          <Line
+            type="monotone"
+            dataKey="fhrBpm"
+            stroke="#ff3b3b"
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+
+      {/* TOCO (bottom) */}
+      <ResponsiveContainer width="100%" height={160}>
+        <LineChart data={data}>
+          <CartesianGrid stroke="#1b2f1b" strokeDasharray="3 3" />
+
+          <XAxis dataKey="x" type="number" hide />
+
+          <YAxis
+            domain={[0, 100]}
+            ticks={[0, 20, 40, 60, 80, 100]}
+            stroke="#666"
+          />
+
+          <Tooltip contentStyle={{ backgroundColor: "#0b0f0b", border: "1px solid #1b2f1b" }} />
+
+          <Line
+            type="monotone"
+            dataKey="toco"
+            stroke="#2f8cff"
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
+  );
 }
 
-  function CtgChart({data = mockCtgData,isAnimationActive = true,}: CtgChartProps) {
-    return (
-    <div className="ctg-chart">
-      {/* Bovenste Chart: foetale hartslag */}
-      <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" interval={59} tickFormatter={formatMMSS}/>
-          <YAxis yAxisId="heartRate" width={50} domain={[50, 210]} tickFormatter={(value) => Math.round(value).toString()} label={{ value: "BPM", angle: -90, position: "insideLeft" }} />
-          <Tooltip labelFormatter={(value) => formatTimestamp(String(value))} />
-          <Legend />
-          <Line yAxisId="heartRate" type="monotone" dataKey="fhrBpm" name="Foetal heart rate" stroke="#cb4335" dot={false} strokeWidth={2} isAnimationActive={isAnimationActive} />
-        </LineChart>
-      </ResponsiveContainer>
-      <ResponsiveContainer width="100%" height={250}>
-        <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" interval={59} tickFormatter={formatMMSS}/>
-          <YAxis yAxisId="toco" width={50} domain={[0, 100]} tickFormatter={(value) => Math.round(value).toString()}  label={{ value: "TOCO", angle: -90, position: "insideLeft" }} />
-          <Tooltip labelFormatter={(value) => formatTimestamp(String(value))} />
-          <Legend />
-          <Line yAxisId="toco" type="monotone" dataKey="toco" name="Contractions" stroke="#2874a6" dot={false} strokeWidth={2} isAnimationActive={isAnimationActive} />
-        </LineChart>
-      </ResponsiveContainer>
-      </div>
-    );
-  }
-
-  export default CtgChart;
+export default CtgChart;

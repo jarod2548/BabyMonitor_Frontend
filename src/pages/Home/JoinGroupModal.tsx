@@ -1,8 +1,8 @@
 import React from "react";
-import type { Group } from "../../contracts/Group";
+import type { GroupResponse } from "../../contracts/Group";
 
 interface Props {
-  groepen: Group[];
+  groepen: GroupResponse[];
   onSelectGroup: (groepId: string) => void;
   onClose: () => void;
 }
@@ -15,8 +15,8 @@ export const JoinGroupModal: React.FC<Props> = ({ groepen, onSelectGroup, onClos
         <div className="group-list">
           {groepen.map(g => (
             <button 
-              key={g.groepId} 
-              onClick={() => onSelectGroup(g.groepId)}
+              key={g.id} 
+              onClick={() => onSelectGroup(g.id)}
             >
               {g.naam}
             </button>

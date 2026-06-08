@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import "./Dashboard_Student.css";
+import "./Class_Student.css";
 import CtgChart from "../../components/CtgChart/CtgChart";
 import type { CtgPoint } from "../../contracts/ctgpoint";
 
-function Dashboard_Student() {
+export default function Class_Student() {
   const [points, setPoints] = useState<CtgPoint[]>([]);
 
   useEffect(() => {
@@ -34,5 +34,3 @@ function Dashboard_Student() {
     </div>
   );
 }
-
-export default Dashboard_Student;

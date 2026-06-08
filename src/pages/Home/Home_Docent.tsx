@@ -44,6 +44,9 @@ export function HomeDocentAction({ embedded = false }: HomeDocentActionProps) {
     if (embedded) {
         return content;
     }
+  if (embedded) {
+    return <div className="Home_Docent embedded">{content}</div>;
+  }
 
     return <div className="button-group">{content}</div>;
 }

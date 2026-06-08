@@ -1,5 +1,4 @@
 export type ctgData = {
-    hartBasis:  number;
+    hartbasis:  number;
     variabiliteit : number;
-    minuten : number;
 }

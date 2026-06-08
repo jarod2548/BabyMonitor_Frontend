@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../axiosConfig";
 import type { CourseReponseDTO } from "../contracts/Course/CourseResponseDTO";
 import type { CourseDTO } from "../contracts/Course/CourseDTO";
 
@@ -23,14 +23,14 @@ export class CourseService{
         try{
             const response = await axios.get("/api/user/courses");
             if(response.status === 200){
-                const responseData : CourseDTO[] = response.data;
+                const responseData : CourseReponseDTO[] = response.data;
                 return responseData;
             }
-            return null;
+            return [];
         }
         catch(error){
             console.log(error);
-            return null;
+            return [];
         }
     }
 
@@ -38,7 +38,7 @@ export class CourseService{
         try{
             const response = await axios.get(`/api/user/course${courseID}`);
             if(response.status === 200){
-                const responseData : CourseDTO = response.data;
+                const responseData : CourseReponseDTO = response.data;
                 return responseData;
             }
             return null;

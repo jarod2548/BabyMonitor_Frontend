@@ -1,15 +1,24 @@
 import axios from "axios";
 import type { maakGroepRequest } from "../contracts/maakGroepRequest";
 import { wsService } from "../WebSocketService";
+import type { GroupResponse } from "../contracts/Group";
 
 export class GroupService {
 
 
     async createGroup(groepRequest : maakGroepRequest) {
-        console.log(groepRequest);
-        const response = await axios.post("/api/groep", groepRequest);
-        console.log(response);
-        return response;
+        try{
+            const response = await axios.post("/api/teacher/groep", groepRequest);
+        if(response.status === 201){
+            const responseData : GroupResponse = response.data;
+            return responseData;
+        }
+        }
+        catch{
+            return null
+        }
+        
+        return null;
     }
     
     async getGroups(){

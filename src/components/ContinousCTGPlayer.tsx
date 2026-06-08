@@ -6,45 +6,59 @@ import type { ctgData } from "../contracts/ctgData";
 
 type Props = {
   ctgData: ctgData;
-  speed?: number;
+  multiplier?: number;
 };
 
 export default function ContinuousCTGPlayer({
   ctgData,
-  speed = 500,
+  multiplier = 1,
 }: Props) {
-  const windowSize = 50;
-  const indexRef = useRef(windowSize);
-  
+  const TIME_STEP = 250;
 
-  // holds real start time (set inside useEffect)
+  const visiblePoints = 240;
 
-  const [points, setPoints] = useState<CtgPoint[]>(() =>
-  Array.from({ length: windowSize }).map((_, i) => ({
-    timestamp: i,
-    fhrBpm: ctgData.hartBasis,
-    toco: 20,
-  }))
-);
+  const [points, setPoints] = useState<CtgPoint[]>(() => {
+    return Array.from({ length: visiblePoints }, (_, i) => ({
+      x: i,
+      timestamp: i * TIME_STEP,
+      fhrBpm: ctgData.hartbasis,
+      toco: 20,
+    }));
+  });
 
-useEffect(() => {
+  const timeRef = useRef(visiblePoints * TIME_STEP);
 
-  const interval = setInterval(() => {
-    setPoints((prev) => {
-      const lastToco = prev[prev.length - 1]?.toco ?? 20;
+  useEffect(() => {
+    const intervalDelay = TIME_STEP / multiplier;
 
-      const nextPoint = ctgService.generateNextPoint(
+    const interval = setInterval(() => {
+      setPoints((prev) => {
+
+       const nextPoint = ctgService.generateNextPoint(
         ctgData,
-        lastToco,
-        indexRef.current++
+        timeRef.current
       );
 
-      return [...prev.slice(1), nextPoint];
-    });
-  }, speed);
+        timeRef.current += TIME_STEP;
 
-  return () => clearInterval(interval);
-}, [speed, ctgData]);
+        const shifted = prev
+          .slice(1)
+          .map((p) => ({
+            ...p,
+            x: p.x - 1,
+          }));
 
-  return <CtgChart data={points} isAnimationActive={false} />;
+        shifted.push({
+          ...nextPoint,
+          x: visiblePoints - 1,
+        });
+
+        return shifted;
+      });
+    }, intervalDelay);
+
+    return () => clearInterval(interval);
+  }, [multiplier, ctgData]);
+
+  return <CtgChart data={points} />;
 }

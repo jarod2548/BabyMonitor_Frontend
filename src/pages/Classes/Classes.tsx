@@ -1,69 +1,66 @@
-import { useEffect, useState } from "react";
-import "./Classes.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CreateGroupModal } from "../../components/CreateGroupModal";
+import { groupService } from "../../Services/GroupService";
+import type { maakGroepRequest } from "../../contracts/maakGroepRequest";
 
-type Groep = {
-    id: string;
-    naam: string;
-    instructeur: string;
-};
+
 
 export default function Classes() {
-    const [groepen, setGroepen] = useState<Groep[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
 
-    async function fetchGroepen() {
-        try {
-            setLoading(true);
-            setError("");
+  const [classCode, setClassCode] = useState("");
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-            // Nginx-proxied API route
-            const res = await fetch("/api/user/groep", {
-                method: "GET",
-                headers: { Accept: "application/json" },
-                // Only enable if your auth uses cookies and Nginx passes them through
-                // credentials: "include",
-            });
+  const navigate = useNavigate();
 
-            if (!res.ok) {
-                const text = await res.text().catch(() => "");
-                throw new Error(`HTTP ${res.status} ${res.statusText}: ${text.slice(0, 120)}`);
-            }
+  const handleJoin = () => {
+    if (!classCode.trim()) return;
 
-            const data = (await res.json()) as Groep[];
-            setGroepen(Array.isArray(data) ? data : []);
-        } catch (e: any) {
-            setError(e?.message ?? "Failed to fetch groups.");
-            setGroepen([]);
-        } finally {
-            setLoading(false);
-        }
+    console.log("Joining class:", classCode);
+
+    navigate("/student/lessons");
+  };
+
+
+  const handleCreateGroup = async (request: maakGroepRequest) => {
+  try {
+    const Groep = await groupService.createGroup(request);
+    if(Groep != null){
+      setShowCreateModal(false);
+      navigate(`/teacher_class/${Groep.id}`);
+    }else{
+      alert("Kon groep niet aanmaken.");
     }
+  } catch (error) {
+    console.error("Failed to create group", error);
+    alert("Kon groep niet aanmaken.");
+  }
+};
 
-    useEffect(() => {
-        fetchGroepen();
-    }, []);
+  return (
+    <div>
+      <h1>Join a Class</h1>
 
-    return (
-        <div className="classesPage">
-            <h1 className="title">Groups</h1>
+      <input
+        value={classCode}
+        onChange={(e) => setClassCode(e.target.value)}
+        placeholder="Enter class code"
+      />
 
-            {loading && <div className="muted">Loading…</div>}
-            {error && <div className="error">{error}</div>}
+      <button onClick={handleJoin}>Join</button>
 
-            {!loading && !error && (
-                <ul className="list">
-                    {groepen.map((g) => (
-                        <li className="listItem" key={g.id}>
-                            <div>
-                                <div className="listTitle">{g.naam}</div>
-                                <div className="listMeta">Instructor: {g.instructeur || "(none)"}</div>
-                            </div>
-                            <div className="listMeta">{g.id}</div>
-                        </li>
-                    ))}
-                </ul>
-            )}
-        </div>
-    );
+      <hr />
+
+      <button onClick={() => setShowCreateModal(true)}>
+        Maak groep aan als leraar
+      </button>
+
+      {showCreateModal && (
+        <CreateGroupModal
+          onClose={() => setShowCreateModal(false)}
+          onCreateGroup={handleCreateGroup}
+        />
+      )}
+    </div>
+  );
 }

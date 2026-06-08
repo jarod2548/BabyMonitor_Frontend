@@ -11,19 +11,16 @@ export default function Course() {
 
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
-  const id = Number(params.id);
+  const courseID = Number(params.id);
   const [antwoorden, setAntwoorden] =  useState<AntwoordReponseDTO[]>([])
   const [currentVraag, setCurrentVraag] = useState<VraagReponseDTO | null>(null);
-  const [page, setPage] = useState(0);
-  const baseSpeed = 500; // 1x speed equals 500ms delay
+  const [page, setPage] = useState(1);
   const [multiplier, setMultiplier] = useState(1);
-  const [ctgSpeed, setCTGSpeed] = useState(500);
 
   const speedOptions = [0.5, 1, 1.5, 2, 4];
 
   const handleSpeedChange = (m: number) => {
-    setMultiplier(m);
-    setCTGSpeed(baseSpeed / m); // e.g. 2x speed = 250ms delay
+    setMultiplier(m); 
   };
 
 
@@ -33,12 +30,12 @@ export default function Course() {
 
   useEffect(() => {
     const fetchCourseInformation = async () => {
-      const vraagResult = await vraagService.fakeLeesVraag(id, page);
+      const vraagResult = await vraagService.leesVraag(courseID, page);
       setCurrentVraag(vraagResult);
     };
 
     fetchCourseInformation();
-}, [id, page]);
+}, [courseID, page]);
 
 useEffect(() => {
   const fetchAntwoorden = async () => {
@@ -56,7 +53,7 @@ useEffect(() => {
   };
 
   fetchAntwoorden();
-}, [id]);
+}, [courseID]);
 
 
     const handleNext = () => {
@@ -88,7 +85,7 @@ if (!currentVraag?.ctgData) {
       <div className="ctg-container">
         <ContinuousCTGPlayer
           ctgData={currentVraag.ctgData}
-          speed={ctgSpeed}
+          multiplier={multiplier}
   />
       </div>
 
