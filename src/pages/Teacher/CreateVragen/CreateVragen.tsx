@@ -1,23 +1,40 @@
-import { useState, type SyntheticEvent } from "react";
+import { useEffect, useState, type SyntheticEvent } from "react";
 import type { VraagDTO } from "../../../contracts/Course/VraagDTO";
 import { vraagService } from "../../../Services/VraagService";
 import { useParams } from "react-router-dom";
+import type { VraagReponseDTO } from "../../../contracts/Course/VraagResponseDTO";
+import type { ctgData } from "../../../contracts/ctgData";
+import CtgDataForm from "../CtgDataForm";
 
 export default function CreateVragen() {
-    const id = useParams<{ id: string }>();
+    const params = useParams<{ id: string }>();
+  const id = Number(params.id);
     
   const [vraagData, setVraagData] = useState<VraagDTO>({
-    tekst : "",
-    courseID: Number(id),
-  });
+  tekst: "",
+  courseID: Number(id),
+  ctgData: {
+    hartbasis: 0,
+    variabiliteit: 0,
+  },
+});
+  const handleCtgChange = (data: ctgData) => {
+  setVraagData((prev) => ({
+    ...prev,
+    ctgData: data,
+  }));
+};
+
+  const [vragen, setVragen] = useState<VraagReponseDTO[]>([]);
   const [message, setMessage] = useState<string>("");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVraagData((prev) => ({
-      ...prev,
-    tekst : e.target.value
-    }));
-  };
+  useEffect(() => {
+    const fetchVragen = async() => {
+      const data : VraagReponseDTO[] = await vraagService.leesVragen(Number(id));
+      setVragen(data);
+    };
+    fetchVragen();
+  }, [id])
 
  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -31,31 +48,71 @@ export default function CreateVragen() {
     }
   };
 
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setVraagData((prev) => ({
+      ...prev,
+      tekst: value,
+    }));
+  };
+
   const saveVraag = async () => {
     vraagService.maakVraag(vraagData);
   }
-
-  return (
+  
+return (
     <div>
-       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '300px' }}>
-      <h2>Maak een nieuwe vraag</h2>
-      
-      <label>
-        Tekst:
-        <input 
-          type="text" 
-          name="titel" 
-          value={vraagData.tekst} 
-          onChange={handleChange} 
-          required 
-        />
-      </label>
+      <div style={{ marginTop: "20px" }}>
+        <h3>Vragen</h3>
 
-      <button type="submit">Sla de vraag op</button>
-    </form>
-     {message && <p className="login-message">{message}</p>} 
+        {vragen.map((v) => (
+          <div
+            key={v.vraagID}
+            style={{
+              padding: "8px",
+              marginBottom: "6px",
+              background: "#1a1a1a",
+              color: "white",
+              borderLeft: "3px solid #00ff88",
+            }}
+          >
+            {v.tekst}
+          </div>
+        ))}
+      </div>
+
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          maxWidth: "300px",
+        }}
+      >
+        <h2>Maak een nieuwe vraag</h2>
+
+        <label>
+          Tekst:
+          <input
+            type="text"
+            value={vraagData.tekst}
+            onChange={handleTextChange}
+            required
+          />
+        </label>
+
+        {/* CTG FIELDS */}
+        <CtgDataForm
+          value={vraagData.ctgData}
+          onChange={handleCtgChange}
+        />
+
+        <button type="submit">Sla de vraag op</button>
+      </form>
+
+      {message && <p className="login-message">{message}</p>}
     </div>
-   
-    
   );
 }

@@ -6,50 +6,59 @@ import type { ctgData } from "../contracts/ctgData";
 
 type Props = {
   ctgData: ctgData;
-  speed?: number;
+  multiplier?: number;
 };
 
 export default function ContinuousCTGPlayer({
   ctgData,
-  speed = 500,
+  multiplier = 1,
 }: Props) {
   const TIME_STEP = 250;
 
-  const secondsToDisplay = 60;
-  const pointsInWindow = (secondsToDisplay * 1000) / TIME_STEP;
-  const indexRef = useRef((pointsInWindow - 1) * TIME_STEP);
-  // holds real start time (set inside useEffect)
+  const visiblePoints = 240;
 
-  const [points, setPoints] = useState<CtgPoint[]>(() =>
-  Array.from({ length: pointsInWindow}).map((_, i) => ({
-    timestamp: i * TIME_STEP,
-    fhrBpm: ctgData.hartBasis,
-    toco: 20,
-  }))
-);
+  const [points, setPoints] = useState<CtgPoint[]>(() => {
+    return Array.from({ length: visiblePoints }, (_, i) => ({
+      x: i,
+      timestamp: i * TIME_STEP,
+      fhrBpm: ctgData.hartbasis,
+      toco: 20,
+    }));
+  });
 
-useEffect(() => {
+  const timeRef = useRef(visiblePoints * TIME_STEP);
 
-  const interval = setInterval(() => {
-    setPoints((prev) => {
-      const lastToco = prev[prev.length - 1]?.toco ?? 20;
+  useEffect(() => {
+    const intervalDelay = TIME_STEP / multiplier;
 
-      const nextPoint = ctgService.generateNextPoint(
+    const interval = setInterval(() => {
+      setPoints((prev) => {
+
+       const nextPoint = ctgService.generateNextPoint(
         ctgData,
-        lastToco,
-        indexRef.current
+        timeRef.current
       );
 
-      indexRef.current += TIME_STEP;
+        timeRef.current += TIME_STEP;
 
-      const newArray = [...prev, nextPoint];
+        const shifted = prev
+          .slice(1)
+          .map((p) => ({
+            ...p,
+            x: p.x - 1,
+          }));
 
-      return newArray.slice(-pointsInWindow); 
-    });
-  }, speed);
+        shifted.push({
+          ...nextPoint,
+          x: visiblePoints - 1,
+        });
 
-  return () => clearInterval(interval);
-}, [speed, ctgData, pointsInWindow]);
+        return shifted;
+      });
+    }, intervalDelay);
 
-  return <CtgChart data={points} isAnimationActive={false}/>;
+    return () => clearInterval(interval);
+  }, [multiplier, ctgData]);
+
+  return <CtgChart data={points} />;
 }

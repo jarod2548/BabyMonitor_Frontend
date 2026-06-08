@@ -6,7 +6,7 @@ export class WebSocketService {
   private subscriptions: Map<string, StompSubscription> = new Map();
   
 
-connect() {
+connect(): Promise<Client> {
   return new Promise((resolve, reject) => {
     if (this.client?.active) this.client.deactivate();
 
@@ -26,13 +26,16 @@ connect() {
       console.error("❌ Broker error:", frame.headers["message"]);
       reject(new Error(frame.headers["message"]));
     };
+    stompClient.onWebSocketError = () => {
+    reject(new Error("WebSocket connection failed"));
+    };
 
     stompClient.activate();
     this.client = stompClient;
   });
 }
 
-sendMessage<T>(endpoint: string, message: T) {
+sendMessage<CtgCommand>(endpoint: string, message?: CtgCommand) {
   if (!this.client || !this.client.connected) {
     console.error("❌ WebSocket not connected. Cannot send message.");
     return;
@@ -46,24 +49,19 @@ sendMessage<T>(endpoint: string, message: T) {
   console.log(`🟢 Message sent to ${endpoint}:`, message);
 }
 
-subscribe<T>(topic: string, callback: (msg: T) => void) {
-    if (!this.client || !this.client.connected) {
-      console.error("❌ WebSocket not connected");
-      return;
-    }
 
-    if (this.subscriptions.has(topic)) {
-      this.unsubscribe(topic);
-    }
+ subscribe<T>(topic: string, callback: (msg: T) => void) : StompSubscription | undefined 
+ { if (!this.client || !this.client.connected) 
+  { console.error("❌ WebSocket not connected"); return; 
 
-    const subscription =  this.client.subscribe(topic, (message) => {
-      callback(JSON.parse(message.body));
-    });
-
-    this.subscriptions.set(topic, subscription);
-
-    return subscription;
+  } if (this.subscriptions.has(topic)) 
+    { this.unsubscribe(topic); } 
+    const subscription = this.client.subscribe(topic, (message) => 
+      { callback(JSON.parse(message.body)); }); 
+    this.subscriptions.set(topic, subscription); 
+    return subscription; 
   }
+  
 
   unsubscribe(topic: string) {
     const sub = this.subscriptions.get(topic);

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { HomeDocentAction } from "./Home_Docent";
+import Home_Docent from "./Home_Docent";
 import Home_Student from "./Home_Student";
 import { useAuth } from "../../authorization/useAuth";
 
@@ -16,7 +16,7 @@ function Home() {
     <div>
       <h1>Home</h1>
       <div className="button-group">
-        <HomeDocentAction embedded />
+        <Home_Docent embedded />
         <Home_Student embedded />
         {context?.user ? <p>Welcome</p> : <button onClick={goToLogin}>Login</button>}
       </div>

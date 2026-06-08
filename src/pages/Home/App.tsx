@@ -1,6 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import Dashboard from "../Dashboard_Docent/Dashboard_Docent";
-import Student from "../Dashboard_Student/Dashboard_Student";
 import Login from "../Login/Login";
 import Register from "../Register/Register";
 import Home from "./Home";
@@ -12,6 +10,8 @@ import CreateLessons from "../Teacher/CreateCourses/CreateCourses";
 import { ProtectedRoute } from "../../security/ProtectedRoute";
 import CreateVragen from "../Teacher/CreateVragen/CreateVragen";
 import Course from "../Course/Course";
+import Class_Docent from "../Class_Docent/ClassDocent";
+import Class_Student from "../Class_Student/Class_Student";
 
 function App() {
   return (
@@ -24,13 +24,13 @@ function App() {
       {/* Protected routes WITH layout */}
       <Route element={<Layout />}>
         <Route
-          path="/teacher"
+          path="/teacher_class/:id"
           element={
-            <ProtectedRoute roles={["Teacher"]}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+          <ProtectedRoute roles={["TEACHER"]}>
+            <Class_Docent />
+          </ProtectedRoute>
+        }
+/>
 
         <Route
           path="/home_docent"
@@ -80,7 +80,7 @@ function App() {
           path="/student"
           element={
             <ProtectedRoute roles={["TEACHER", "USER"]}>
-              <Student />
+              <Class_Student />
             </ProtectedRoute>
           }
         />
