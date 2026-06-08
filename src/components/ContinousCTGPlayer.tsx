@@ -13,15 +13,16 @@ export default function ContinuousCTGPlayer({
   ctgData,
   speed = 500,
 }: Props) {
-  const windowSize = 50;
-  const indexRef = useRef(windowSize);
-  
+  const TIME_STEP = 250;
 
+  const secondsToDisplay = 60;
+  const pointsInWindow = (secondsToDisplay * 1000) / TIME_STEP;
+  const indexRef = useRef((pointsInWindow - 1) * TIME_STEP);
   // holds real start time (set inside useEffect)
 
   const [points, setPoints] = useState<CtgPoint[]>(() =>
-  Array.from({ length: windowSize }).map((_, i) => ({
-    timestamp: i,
+  Array.from({ length: pointsInWindow}).map((_, i) => ({
+    timestamp: i * TIME_STEP,
     fhrBpm: ctgData.hartBasis,
     toco: 20,
   }))
@@ -36,15 +37,19 @@ useEffect(() => {
       const nextPoint = ctgService.generateNextPoint(
         ctgData,
         lastToco,
-        indexRef.current++
+        indexRef.current
       );
 
-      return [...prev.slice(1), nextPoint];
+      indexRef.current += TIME_STEP;
+
+      const newArray = [...prev, nextPoint];
+
+      return newArray.slice(-pointsInWindow); 
     });
   }, speed);
 
   return () => clearInterval(interval);
-}, [speed, ctgData]);
+}, [speed, ctgData, pointsInWindow]);
 
-  return <CtgChart data={points} isAnimationActive={false} />;
+  return <CtgChart data={points} isAnimationActive={false}/>;
 }

@@ -27,7 +27,7 @@ class CtgGeneratorService {
       const toco = Math.round(20 + Math.sin(i / 10) * 15);
 
       points.push({
-        timestamp: 1,
+        timestamp: i * 250,
         fhrBpm: fhrBpm,
         toco: toco
       });

@@ -3,29 +3,28 @@
   import { mockCtgData } from "../MockData";
   import type { CtgPoint } from "../../contracts/ctgpoint";
 
-  type CtgChartProps = {data?: CtgPoint[];isAnimationActive?: boolean;};
+  type CtgChartProps = {data?: CtgPoint[];
+    isAnimationActive?: boolean;
+    speed? : number;};
 
-  const formatTimestamp = (timestamp: string) =>new Date(timestamp).toLocaleTimeString([], {hour: "2-digit",minute: "2-digit",});
+  function CtgChart({data = mockCtgData,isAnimationActive = true}: CtgChartProps) {
 
-  const formatMMSS = (value: number) => {
-  const seconds = value * 2; // optional scaling (depends on speed)
+    const formatMMSS = (elapsedTime: number) => {
+    const totalSeconds = Math.floor(elapsedTime / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
 
-  const minutes = Math.floor(seconds / 60);
-  const sec = seconds % 60;
-
-  return `${minutes}.${sec.toString().padStart(2, "0")}`;
-}
-
-  function CtgChart({data = mockCtgData,isAnimationActive = true,}: CtgChartProps) {
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  };
     return (
     <div className="ctg-chart">
       {/* Bovenste Chart: foetale hartslag */}
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" interval={59} tickFormatter={formatMMSS}/>
+          <XAxis dataKey="timestamp" minTickGap={20} tickFormatter={formatMMSS} type="number" domain={['dataMin', 'dataMax']}/>
           <YAxis yAxisId="heartRate" width={50} domain={[50, 210]} tickFormatter={(value) => Math.round(value).toString()} label={{ value: "BPM", angle: -90, position: "insideLeft" }} />
-          <Tooltip labelFormatter={(value) => formatTimestamp(String(value))} />
+          <Tooltip labelFormatter={(value) => formatMMSS(value)} />
           <Legend />
           <Line yAxisId="heartRate" type="monotone" dataKey="fhrBpm" name="Foetal heart rate" stroke="#cb4335" dot={false} strokeWidth={2} isAnimationActive={isAnimationActive} />
         </LineChart>
@@ -33,9 +32,9 @@
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="timestamp" interval={59} tickFormatter={formatMMSS}/>
+          <XAxis dataKey="timestamp" minTickGap={20}  tickFormatter={formatMMSS} type="number" domain={['dataMin', 'dataMax']}/>
           <YAxis yAxisId="toco" width={50} domain={[0, 100]} tickFormatter={(value) => Math.round(value).toString()}  label={{ value: "TOCO", angle: -90, position: "insideLeft" }} />
-          <Tooltip labelFormatter={(value) => formatTimestamp(String(value))} />
+          <Tooltip labelFormatter={(value) => formatMMSS(value)} />
           <Legend />
           <Line yAxisId="toco" type="monotone" dataKey="toco" name="Contractions" stroke="#2874a6" dot={false} strokeWidth={2} isAnimationActive={isAnimationActive} />
         </LineChart>
