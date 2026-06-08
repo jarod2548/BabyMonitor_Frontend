@@ -7,8 +7,6 @@ import "./App.css";
 
 interface HomeDocentActionProps {
     embedded?: boolean;
-interface HomeDocentProps {
-  embedded?: boolean;
 }
 
 export function HomeDocentAction({ embedded = false }: HomeDocentActionProps) {
@@ -59,11 +57,6 @@ function Home_Docent() {
             <h1>Home Dashboard</h1>
         </div>
     );
-  return (
-    <div className="Home_Docent start-dashboard">
-      {content}
-    </div>
-  );
 }
 
 export default Home_Docent;

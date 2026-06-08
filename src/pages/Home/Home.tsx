@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Home_Docent from "./Home_Docent";
+import { HomeDocentAction } from "./Home_Docent";
 import Home_Student from "./Home_Student";
 import { useAuth } from "../../authorization/useAuth";
 
