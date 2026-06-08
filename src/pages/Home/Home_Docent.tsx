@@ -1,57 +1,64 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { AccountService } from "../../Services/AccountService";
+import type { RegisterDTO } from "../../contracts/Account/RegisterDTO";
+import { CreateAccountModal } from "./CreateAccountModal.tsx";
 import "./Home_Docent.css";
 import "./App.css";
 
+interface HomeDocentActionProps {
+    embedded?: boolean;
 interface HomeDocentProps {
   embedded?: boolean;
 }
 
-function Home_Docent({ embedded = false }: HomeDocentProps) {
-  const navigate = useNavigate();
+export function HomeDocentAction({ embedded = false }: HomeDocentActionProps) {
+    const [creationVisible, setCreationVisible] = useState(false);
 
-  const content = (
-    <div className="start-container">
+    const toggleCreateGroup = () => setCreationVisible((prev) => !prev);
 
-      <h1 className="title">Welcome</h1>
-      <p className="subtitle">
-        Select how you want to continue
-      </p>
+    const goToTeacher = async (account: RegisterDTO) => {
+        try {
+            const accountService = new AccountService();
+            const response = await accountService.Registratie(account);
 
-      <div className="card-grid">
+            if (!response) {
+                console.log("Account creation failed");
+                return;
+            }
 
-        {/* Teacher entry */}
-        <div className="start-card teacher">
-          <h2>Teacher</h2>
-          <p>
-            Create lessons, control simulations and manage groups.
-          </p>
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-          <button onClick={() => navigate("/teacher")}>
-            Enter Teacher Dashboard
-          </button>
-        </div>
+    const content = (
+        <>
+            <button onClick={toggleCreateGroup}>Create account</button>
+            {creationVisible && (
+                <CreateAccountModal
+                    onClose={toggleCreateGroup}
+                    onCreateGroup={goToTeacher}
+                />
+            )}
+        </>
+    );
 
-        {/* Student entry */}
-        <div className="start-card student">
-          <h2>Student</h2>
-          <p>
-            Join your assigned session and follow along.
-          </p>
-
-          <button onClick={() => navigate("/student")}>
-            Enter Student View
-          </button>
-        </div>
-
-      </div>
-
-    </div>
-  );
-
+    if (embedded) {
+        return content;
+    }
   if (embedded) {
     return <div className="Home_Docent embedded">{content}</div>;
   }
 
+    return <div className="button-group">{content}</div>;
+}
+
+function Home_Docent() {
+    return (
+        <div className="Home_Docent">
+            <h1>Home Dashboard</h1>
+        </div>
+    );
   return (
     <div className="Home_Docent start-dashboard">
       {content}

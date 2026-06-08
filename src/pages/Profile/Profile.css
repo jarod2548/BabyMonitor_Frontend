@@ -1,0 +1,150 @@
+.profilePage {
+    max-width: 480px;
+    margin: 3em auto;
+    padding: 0 1em;
+}
+
+.profileTitle {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 1.5em;
+    color: #212529;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.profileBlock {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 2px 24px 0 rgba(60, 80, 110, 0.08);
+    padding: 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2em;
+    border: 1px solid #eceff3;
+}
+
+.profileRow {
+    display: flex;
+    gap: 1.5em;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 1.22em;
+}
+
+.profileLabel {
+    color: #6575a8;
+    font-weight: 600;
+    min-width: 100px;
+}
+
+.profileValue {
+    color: #26296d;
+    font-family: monospace;
+}
+
+.profileLoading {
+    text-align: center;
+    color: #778;
+}
+
+.profileError {
+    background: #ffdede;
+    color: #c60027;
+    padding: 1em;
+    text-align: center;
+    border-radius: 8px;
+    margin-top: 1em;
+}
+
+.changePasswordBtn {
+    margin-top: 1em;
+    padding: 0.75em 1.5em;
+    background: #6575a8;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.changePasswordBtn:hover {
+    background: #535c8f;
+}
+
+.passwordChangeBlock {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 2px 24px 0 rgba(60, 80, 110, 0.08);
+    padding: 2em;
+    border: 1px solid #eceff3;
+    margin-top: 2em;
+}
+
+.passwordChangeTitle {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #212529;
+    margin-bottom: 1.5em;
+    text-align: center;
+}
+
+.formGroup {
+    margin-bottom: 1.5em;
+    display: flex;
+    flex-direction: column;
+}
+
+.formLabel {
+    color: #6575a8;
+    font-weight: 600;
+    margin-bottom: 0.5em;
+    font-size: 1em;
+}
+
+.formInput {
+    padding: 0.75em;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: monospace;
+    transition: border-color 0.3s ease;
+}
+
+.formInput:focus {
+    outline: none;
+    border-color: #6575a8;
+}
+
+.submitBtn {
+    padding: 0.75em 1.5em;
+    background: #26296d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+}
+
+.submitBtn:hover:not(:disabled) {
+    background: #1a1c49;
+}
+
+.submitBtn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.profileSuccess {
+    background: #d4edda;
+    color: #155724;
+    padding: 1em;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 1em;
+}

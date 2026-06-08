@@ -10,16 +10,17 @@ import CreateLessons from "../Teacher/CreateCourses/CreateCourses";
 import { ProtectedRoute } from "../../security/ProtectedRoute";
 import CreateVragen from "../Teacher/CreateVragen/CreateVragen";
 import Course from "../Course/Course";
+import Profile from "../Profile/Profile";
 import Class_Docent from "../Class_Docent/ClassDocent";
 import Class_Student from "../Class_Student/Class_Student";
 
 function App() {
-  return (
-    <Routes>
-      {/* Public routes */}
-      <Route path="/" element={<Login />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+    return (
+        <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
 
       {/* Protected routes WITH layout */}
       <Route element={<Layout />}>
@@ -32,80 +33,88 @@ function App() {
         }
 />
 
-        <Route
-          path="/home_docent"
-          element={
-            <ProtectedRoute roles={["TEACHER"]}>
-              <Home_Docent />
-            </ProtectedRoute>
-          }
-        />
+                <Route
+                    path="/home_docent"
+                    element={
+                        <ProtectedRoute roles={["TEACHER"]}>
+                            <Home_Docent />
+                        </ProtectedRoute>
+                    }
+                />
 
-        <Route
-          path="/create_courses"
-          element={
-            <ProtectedRoute roles={["TEACHER"]}>
-              <CreateLessons />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/create_vragen">
-          <Route
-            path=":id"
-          element={
-            <ProtectedRoute roles={["TEACHER"]}>
-              <CreateVragen />
-            </ProtectedRoute>
-          }
-          />
-        </Route>
+                <Route
+                    path="/create_courses"
+                    element={
+                        <ProtectedRoute roles={["TEACHER"]}>
+                            <CreateLessons />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/create_vragen">
+                    <Route
+                        path=":id"
+                        element={
+                            <ProtectedRoute roles={["TEACHER"]}>
+                                <CreateVragen />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Route>
 
-        <Route
-          path="/classes"
-          element={
-            <ProtectedRoute roles={["TEACHER", "USER"]}>
-              <Classes />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/lessons"
-          element={
-            <ProtectedRoute roles={["TEACHER", "USER"]}>
-              <Lessons />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/student"
-          element={
-            <ProtectedRoute roles={["TEACHER", "USER"]}>
-              <Class_Student />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/course">
-          <Route
-            path=":id"
-            element={
-            <ProtectedRoute roles={["USER", "TEACHER"]}>
-              <Course />
-            </ProtectedRoute>
-            }
-          />
-        </Route>
+                <Route
+                    path="/classes"
+                    element={
+                        <ProtectedRoute roles={["TEACHER", "USER"]}>
+                            <Classes />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/lessons"
+                    element={
+                        <ProtectedRoute roles={["TEACHER", "USER"]}>
+                            <Lessons />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/student"
+                    element={
+                        <ProtectedRoute roles={["TEACHER", "USER"]}>
+                            <Student />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/profile"
+                    element={
+                        <ProtectedRoute roles={["TEACHER", "USER"]}>
+                            <Profile />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path="/course">
+                    <Route
+                        path=":id"
+                        element={
+                            <ProtectedRoute roles={["USER", "TEACHER"]}>
+                                <Course />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Route>
 
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-      </Route>
-    </Routes>
-  );
+                <Route
+                    path="/home"
+                    element={
+                        <ProtectedRoute>
+                            <Home />
+                        </ProtectedRoute>
+                    }
+                />
+            </Route>
+        </Routes>
+    );
 }
 
 export default App;
