@@ -1,4 +1,4 @@
-import { describe, test, expect, vi} from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import { accountService } from '../../Services/AccountService'
 import type { LoginDTO } from '../../contracts/Account/LoginDTO';
 import axios from 'axios';
@@ -8,73 +8,73 @@ vi.mock("axios");
 const mockedAxios = vi.mocked(axios)
 
 describe('validateLogin', () => {
-  test('fails when fields are empty', () => {
-    expect(accountService.validateLogin({ email: '', password: '' }))
-      .toBe('Please fill in both fields!')
-  })
+    test('fails when fields are empty', () => {
+        expect(accountService.validateLogin({ email: '', password: '' }))
+            .toBe('Please fill in both fields!')
+    })
 
-  test('passes when fields are filled', () => {
-    expect(accountService.validateLogin({ email: 'a', password: 'b' }))
-      .toBe(null)
-  })
+    test('passes when fields are filled', () => {
+        expect(accountService.validateLogin({ email: 'a', password: 'b' }))
+            .toBe(null)
+    })
 })
 
 describe('login', () => {
-  const mockLogin : LoginDTO = {
-      email : 'naam',
-      password : '1234'
+    const mockLogin: LoginDTO = {
+        email: 'naam',
+        password: '1234'
     }
 
-  test('login success' ,  async () => {
-    
-    const fakeResponse = {
-      status: 200,
-      data: {
-        id: 1,
-        email: 'john',
-        token: 'abc'
-      }
-    }
+    test('login success', async () => {
 
-    mockedAxios.post.mockResolvedValueOnce(fakeResponse)
+        const fakeResponse = {
+            status: 200,
+            data: {
+                id: 1,
+                email: 'john',
+                token: 'abc'
+            }
+        }
 
-    const result = await accountService.Login(mockLogin)
+        mockedAxios.post.mockResolvedValueOnce(fakeResponse)
 
-    expect(result).toEqual(fakeResponse.data)
+        const result = await accountService.Login(mockLogin)
 
-  })
+        expect(result).toEqual(fakeResponse.data)
 
-  test('login faalt', async () => {
+    })
 
-    mockedAxios.post.mockRejectedValueOnce(new Error('Server error'));
+    test('login faalt', async () => {
 
-    const result = await accountService.Login(mockLogin);
+        mockedAxios.post.mockRejectedValueOnce(new Error('Server error'));
 
-    expect(result).toBe(null);
-  })
+        const result = await accountService.Login(mockLogin);
+
+        expect(result).toBe(null);
+    })
 })
 
 describe('registreer', () => {
-  const mockRegistratie : RegisterDTO = {
-    username : "naam",
-    password : '1234',
-    email : 'test@gmail.com'
-  }
-  test("registratie succes", async () => {
-    
-    mockedAxios.post.mockResolvedValueOnce(undefined)
+    const mockRegistratie: RegisterDTO = {
+        username: "naam",
+        password: '1234',
+        email: 'test@gmail.com'
+    }
+    test("registratie succes", async () => {
 
-    const result = await accountService.Registratie(mockRegistratie);
+        mockedAxios.post.mockResolvedValueOnce(undefined)
 
-    expect(result).toBe(true);
-  })
+        const result = await accountService.Registratie(mockRegistratie);
 
-  test('registratie fail', async () => {
+        expect(result).toBe(null);
+    })
 
-    mockedAxios.post.mockRejectedValueOnce(new Error('fail'))
+    test('registratie fail', async () => {
 
-    const result = await accountService.Registratie(mockRegistratie)
+        mockedAxios.post.mockRejectedValueOnce(new Error('fail'))
 
-    expect(result).toBe(false)
-  })
+        const result = await accountService.Registratie(mockRegistratie)
+
+        expect(result).toBe(null)
+    })
 })

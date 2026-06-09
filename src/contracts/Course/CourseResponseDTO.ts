@@ -1,4 +1,5 @@
 export type CourseReponseDTO = {
     titel : string;
-    courseID : number;
+    id : number;
+    isCompleet : boolean;
 }

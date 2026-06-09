@@ -54,14 +54,14 @@ export default function Login() {
             placeholder="Name"
             value={loginData.email}
             onChange={handleNameChange}
-            className="pill input-field"
+            className="input-field"
           />
           <input
             type="password"
             placeholder="Password"
             value={loginData.password}
             onChange={handlePasswordChange}
-            className="pill input-field"
+            className="input-field"
           />
           <button type="submit" className="apply login-button">Login</button>
         </form>

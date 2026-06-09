@@ -1,14 +1,26 @@
-import { useState, type SyntheticEvent } from "react";
+import { useEffect, useState, type SyntheticEvent } from "react";
 import { antwoordService } from "../../../Services/AntwoordService";
 import { useParams } from "react-router-dom";
 import type { AntwoordDTO } from "../../../contracts/Course/AntwoordDTO";
+import type { AntwoordReponseDTO } from "../../../contracts/Course/AntwoordResponseDTO";
 
 
 export default function CreateAntwoorden() {
 
-  const id = useParams<{ id: string }>();
+  const params = useParams<{ id: string }>();
+  const id = Number(params.id);
   const [antwoordData, setAntwoordData] = useState<AntwoordDTO[]>([{ tekst: "" , courseID: Number(id)}]);
+  const [antwoorden, setAntwoorden] = useState<AntwoordReponseDTO[]>([]);
   const [message, setMessage] = useState<string>("");
+
+
+  useEffect(()=> {
+    const fetchVragen = async() => {
+      const restultaten = await antwoordService.leesAntwoorden(id);
+      setAntwoorden(restultaten);
+    }
+    fetchVragen();
+  },[id])
 
   const handleChange = (index: number, val: string) => {
     const updated = [...antwoordData];
@@ -72,6 +84,20 @@ export default function CreateAntwoorden() {
         <button type="button" onClick={voegAntwoordToe}>
           + Extra antwoord toevoegen
         </button>
+
+        <h3>Bestaande antwoorden</h3>
+
+        {antwoorden.length === 0 ? (
+          <p>Geen antwoorden gevonden.</p>
+        ) : (
+          <ul>
+            {antwoorden.map((antwoord) => (
+              <li key={antwoord.antwoordID}>
+                {antwoord.tekst}
+              </li>
+            ))}
+          </ul>
+        )}
 
         <hr />
 

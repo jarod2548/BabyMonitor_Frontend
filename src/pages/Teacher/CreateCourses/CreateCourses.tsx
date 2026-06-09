@@ -7,8 +7,8 @@ import type { CourseReponseDTO } from "../../../contracts/Course/CourseResponseD
 export default function CreateLessons() {
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState<CourseDTO>({
-    titel: ""
-    // Add other fields from VraagDTO here
+    titel: "",
+    isCompleet : false
   });
   const [message, setMessage] = useState<string>("");
 
@@ -31,7 +31,7 @@ export default function CreateLessons() {
   const saveCourse = async () => {
     const result : CourseReponseDTO | null = await courseService.maakCourse(courseData);
     if(result != null){
-      navigate(`/create_vragen/${result.courseID}`);
+      navigate(`/create_vragen/${result.id}`);
     }
     else {
     setMessage("Fout bij het aanmaken van de cursus.");

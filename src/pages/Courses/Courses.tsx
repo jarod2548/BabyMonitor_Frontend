@@ -1,16 +1,26 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../authorization/useAuth";
 import type { CourseReponseDTO } from "../../contracts/Course/CourseResponseDTO";
+import { useEffect, useState } from "react";
+import { courseService } from "../../Services/CourseService";
 
 export default function Lessons() {
   const context = useAuth();
   const navigate = useNavigate();
-  const courses: CourseReponseDTO[] = [{titel : "Titel", courseID : 1}];
+  const [courses, setCourses] = useState<CourseReponseDTO[]>([]);
 
   const startLesson = (course : CourseReponseDTO) => {
     console.log("Start lesson:", course);
-    navigate(`/course/${course.courseID}`);
+    navigate(`/course/${course.id}`);
   };
+
+  useEffect(() => {
+    const fetchCourses = async() =>{
+      const data = await courseService.leesCourses();
+      setCourses(data);
+    };
+    fetchCourses(); 
+  }, [])
 
   return (
     <div>
@@ -24,16 +34,24 @@ export default function Lessons() {
           >
             + Create New Course
           </button>
+          
         )}
       </div>
       <h1>Select a Course</h1>
 
       {courses.map((course) => (
-        <div key={course.courseID}>
+        <div key={course.id} className="course-row" >
           {course.titel}
           <button onClick={() => startLesson(course)}>
             Start
           </button>
+          {context?.user?.role === "TEACHER" && (
+          <button
+            onClick={() => navigate(`/create_vragen/${course.id}`)}
+          >
+            Vragen
+          </button>
+          )}
         </div>
       ))}
     </div>
