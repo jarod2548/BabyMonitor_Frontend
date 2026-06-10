@@ -31,7 +31,7 @@ export default function CreateLessons() {
   const saveCourse = async () => {
     const result : CourseReponseDTO | null = await courseService.maakCourse(courseData);
     if(result != null){
-      navigate(`/create_vragen/${result.id}`);
+      navigate(`/edit_course/${result.id}`);
     }
     else {
     setMessage("Fout bij het aanmaken van de cursus.");

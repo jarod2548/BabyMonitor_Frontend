@@ -30,7 +30,7 @@ export default function Course() {
 
   useEffect(() => {
     const fetchCourseInformation = async () => {
-      const vraagResult = await vraagService.leesVraag(courseID, page);
+      const vraagResult = await vraagService.leesVraagCourse(courseID, page);
       setCurrentVraag(vraagResult);
     };
 

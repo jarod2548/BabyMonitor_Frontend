@@ -61,7 +61,7 @@ function CtgChart({ data }: Props) {
 
           <Line
             type="monotone"
-            dataKey="toco"
+            dataKey="wee"
             stroke="#2f8cff"
             strokeWidth={2}
             dot={false}

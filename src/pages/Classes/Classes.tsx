@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CreateGroupModal } from "../../components/CreateGroupModal";
 import { groupService } from "../../Services/GroupService";
 import type { maakGroepRequest } from "../../contracts/maakGroepRequest";
+import type { GroupResponse } from "../../contracts/GroupResponse";
 
 
 
@@ -10,6 +11,7 @@ export default function Classes() {
 
   const [classCode, setClassCode] = useState("");
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [classes, setClasses] = useState<GroupResponse[]>([]);
 
   const navigate = useNavigate();
 
@@ -20,6 +22,19 @@ export default function Classes() {
 
     navigate("/student/lessons");
   };
+
+  useEffect(() => {
+  const fetchGroups = async () => {
+    try {
+      const data = await groupService.getGroups();
+      setClasses(data);
+    } catch (error) {
+      console.error("Failed to load groups", error);
+    }
+  };
+
+  fetchGroups();
+}, []);
 
 
   const handleCreateGroup = async (request: maakGroepRequest) => {
@@ -36,6 +51,10 @@ export default function Classes() {
     alert("Kon groep niet aanmaken.");
   }
 };
+
+const joinGroup = async(groepId: string) => {
+  navigate(`/student_class/${groepId}`);
+}
 
   return (
     <div>
@@ -60,6 +79,29 @@ export default function Classes() {
           onClose={() => setShowCreateModal(false)}
           onCreateGroup={handleCreateGroup}
         />
+      )}
+
+            <hr />
+
+      <h2>Your Classes</h2>
+
+      {classes.length === 0 ? (
+        <p>No classes found</p>
+      ) : (
+        <ul>
+          {classes.map((group) => (
+            <li key={group.id}>
+              {group.naam}
+
+              <button
+                onClick={() => joinGroup(group.id)}
+                style={{ marginLeft: "10px" }}
+              >
+                Join
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

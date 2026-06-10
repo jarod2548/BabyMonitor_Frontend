@@ -117,7 +117,7 @@ class CtgGeneratorService {
       x: 0,
       timestamp,
       fhrBpm: Math.round(this.currentFhr),
-      toco: Math.round(this.currentToco),
+      wee: Math.round(this.currentToco),
     };
   }
 }

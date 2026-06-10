@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { maakGroepRequest } from "../contracts/maakGroepRequest";
 import { wsService } from "../WebSocketService";
-import type { GroupResponse } from "../contracts/Group";
+import type { GroupResponse } from "../contracts/GroupResponse";
 
 export class GroupService {
 
@@ -21,10 +21,9 @@ export class GroupService {
         return null;
     }
     
-    async getGroups(){
-        const response = await axios.get("/api/user/groep");
-        console.log(response);
-        return response;
+    async getGroups(): Promise<GroupResponse[]> {
+        const response = await axios.get<GroupResponse[]>("/api/user/groep");
+        return response.data;
     }
     leaveGroupOnUnload() {
         const id = localStorage.getItem("groupId");
