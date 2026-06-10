@@ -1,18 +1,19 @@
 import { useEffect, useState, type SyntheticEvent } from "react";
 import type { VraagDTO } from "../../../contracts/Course/VraagDTO";
 import { vraagService } from "../../../Services/VraagService";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type { VraagReponseDTO } from "../../../contracts/Course/VraagResponseDTO";
 import type { ctgData } from "../../../contracts/ctgData";
 import CtgDataForm from "../CtgDataForm";
 
 export default function CreateVragen() {
     const params = useParams<{ id: string }>();
-  const id = Number(params.id);
+  const courseID = Number(params.id);
+  const navigate = useNavigate();
     
   const [vraagData, setVraagData] = useState<VraagDTO>({
   tekst: "",
-  courseID: Number(id),
+  courseID: Number(courseID),
   ctgData: {
     hartbasis: 0,
     variabiliteit: 0,
@@ -30,11 +31,11 @@ export default function CreateVragen() {
 
   useEffect(() => {
     const fetchVragen = async() => {
-      const data : VraagReponseDTO[] = await vraagService.leesVragen(Number(id));
+      const data : VraagReponseDTO[] = await vraagService.leesVragen(Number(courseID));
       setVragen(data);
     };
     fetchVragen();
-  }, [id])
+  }, [courseID])
 
  const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -57,9 +58,24 @@ export default function CreateVragen() {
     }));
   };
 
+
   const saveVraag = async () => {
-    vraagService.maakVraag(vraagData);
-  }
+    await vraagService.maakVraag(vraagData);
+
+    const data = await vraagService.leesVragen(courseID);
+    setVragen(data);
+
+    setVraagData({
+      tekst: "",
+      courseID,
+      ctgData: {
+        hartbasis: 0,
+        variabiliteit: 0,
+      },
+    });
+
+  setMessage("");
+};
   
 return (
     <div>
@@ -67,8 +83,9 @@ return (
         <h3>Vragen</h3>
 
         {vragen.map((v) => (
-          <div
-            key={v.vraagID}
+          <button
+            key={v.id}
+            onClick={() => navigate(`/edit_vraag/${courseID}/${v.id}`)}
             style={{
               padding: "8px",
               marginBottom: "6px",
@@ -78,7 +95,7 @@ return (
             }}
           >
             {v.tekst}
-          </div>
+          </button>
         ))}
       </div>
 

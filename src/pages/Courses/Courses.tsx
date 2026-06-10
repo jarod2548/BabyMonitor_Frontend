@@ -40,20 +40,24 @@ export default function Lessons() {
       <h1>Select a Course</h1>
 
       {courses.map((course) => (
-        <div key={course.id} className="course-row" >
-          {course.titel}
-          <button onClick={() => startLesson(course)}>
-            Start
-          </button>
-          {context?.user?.role === "TEACHER" && (
-          <button
-            onClick={() => navigate(`/create_vragen/${course.id}`)}
-          >
-            Vragen
-          </button>
-          )}
-        </div>
-      ))}
+  <div key={course.id} className="course-row">
+    {course.titel}
+
+    <button onClick={() => startLesson(course)}>
+      Start
+    </button>
+
+    {context?.user?.role === "TEACHER" && (
+      <>
+        <button
+          onClick={() => navigate(`/edit_course/${course.id}`)}
+        >
+          Pas de course aan
+        </button>
+      </>
+    )}
+  </div>
+))}
     </div>
   );
 }

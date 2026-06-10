@@ -1,6 +1,8 @@
 import axios from "axios";
 import type { VraagDTO } from "../contracts/Course/VraagDTO";
 import type { VraagReponseDTO } from "../contracts/Course/VraagResponseDTO";
+import type { VraagAntwoordDTO } from "../contracts/Course/VraagAntwoordDTO";
+import type { AntwoordMetStatusDTO } from "../contracts/Course/AntwoordMetStatusDTO";
 //import type { ctgData } from "../contracts/ctgData";
 
 export class VraagService{
@@ -20,9 +22,23 @@ export class VraagService{
         }
     }
 
-   async leesVraag(courseID : number, pageID : number){
+   async leesVraagCourse(courseID : number, pageID : number){
        try{
-           const response = await axios.get(`/api/user/vraag/${courseID}/${pageID}`);
+           const response = await axios.get(`/api/user/vraagCourse/${courseID}/${pageID}`);
+           if(response.status === 200){
+               const responseData : VraagReponseDTO = response.data;
+               return responseData;
+           }
+           return null;
+       }
+       catch(error){
+           console.log(error);
+           return null;
+       }
+   }
+   async leesVraag(vraagID : number){
+       try{
+           const response = await axios.get(`/api/user/vraag/${vraagID}`);
            if(response.status === 200){
                const responseData : VraagReponseDTO = response.data;
                return responseData;
@@ -37,7 +53,7 @@ export class VraagService{
 
    async leesVragen(courseID : number){
     try{
-        const response = await axios.get(`/api/user/vraag/${courseID}`);
+        const response = await axios.get(`/api/user/vragen/${courseID}`);
         if(response.status === 200){
             const responseData : VraagReponseDTO[] = response.data;
             return responseData;
@@ -50,11 +66,32 @@ export class VraagService{
     }
    }
 
-    //async fakeLeesVraag(courseID : number, pageID : number){
-    //    const ctgData : ctgData = {hartBasis : 100, variabiliteit : 10, minuten : 10};
-    //    const response : VraagReponseDTO = {courseID : courseID, tekst : "Course 1", vraagID : pageID, ctgData };
-    //    return response;
-    //}
+    async linkAntwoordToVraag(vraagAntwoord : VraagAntwoordDTO){
+        try{
+            const response = await axios.post(`/api/teacher/vraag-antwoord`, vraagAntwoord);
+            if(response.status === 201){
+             const responseData = response.data;
+             return responseData;   
+            }
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    async leesGekoppeldeAntwoorden(vraagID : number, courseID : number){
+        try{
+            const response = await axios.get(`/api/teacher/vraag-antwoord/${courseID}/${vraagID}`);
+            if(response.status === 200){
+                const responseData : AntwoordMetStatusDTO[] = response.data;
+                return responseData;
+            }
+            return [];
+        }catch(err){
+            console.log(err);
+            return [];
+        }
+    }
 
     validateVraag(data : VraagDTO){
         if(!data.tekst){

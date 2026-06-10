@@ -13,6 +13,7 @@ import Course from "../Course/Course";
 import Profile from "../Profile/Profile";
 import Class_Docent from "../Class_Docent/ClassDocent";
 import Class_Student from "../Class_Student/Class_Student";
+import EditCourse from "../Teacher/Course/EditCourse";
 
 function App() {
     return (
@@ -31,7 +32,15 @@ function App() {
             <Class_Docent />
           </ProtectedRoute>
         }
-/>
+        />
+        <Route
+          path="/student_class/:id"
+          element={
+          <ProtectedRoute roles={["TEACHER", "USER"]}>
+            <Class_Student />
+          </ProtectedRoute>
+        }
+        />
 
                 <Route
                     path="/home_docent"
@@ -59,7 +68,9 @@ function App() {
                             </ProtectedRoute>
                         }
                     />
+                    
                 </Route>
+                <Route path="/edit_course/:id" element={<EditCourse />} />
 
                 <Route
                     path="/classes"
@@ -74,14 +85,6 @@ function App() {
                     element={
                         <ProtectedRoute roles={["TEACHER", "USER"]}>
                             <Lessons />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/student"
-                    element={
-                        <ProtectedRoute roles={["TEACHER", "USER"]}>
-                            <Class_Student />
                         </ProtectedRoute>
                     }
                 />

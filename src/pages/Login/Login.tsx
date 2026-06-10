@@ -41,7 +41,9 @@ export default function Login() {
     if(user != null){
       context?.setUser(user);
       navigate("/home");
-    }
+    } else {
+    setMessage("Onjuiste inloggegevens");
+  }
 };
 
   return (

@@ -35,7 +35,20 @@ connect(): Promise<Client> {
   });
 }
 
-sendMessage<CtgCommand>(endpoint: string, message?: CtgCommand) {
+sendHeartbeat<HeartbeatData>(endpoint: string, message?: HeartbeatData) {
+  if (!this.client || !this.client.connected) {
+    console.error("❌ WebSocket not connected. Cannot send message.");
+    return;
+  }
+
+  this.client.publish({
+  destination: endpoint,
+  body: JSON.stringify(message),
+  headers: {} // optional
+});
+  console.log(`🟢 Message sent to ${endpoint}:`, message);
+}
+sendWee<WeeData>(endpoint: string, message?: WeeData) {
   if (!this.client || !this.client.connected) {
     console.error("❌ WebSocket not connected. Cannot send message.");
     return;

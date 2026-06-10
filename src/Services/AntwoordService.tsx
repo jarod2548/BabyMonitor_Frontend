@@ -4,7 +4,7 @@ import type { AntwoordReponseDTO } from "../contracts/Course/AntwoordResponseDTO
 
 export class AntwoordService{
 
-    async maakAntwoord(data : AntwoordDTO[]){
+    async maakAntwoord(data : AntwoordDTO){
         try{
             const response = await axios.post("/api/teacher/antwoord", data);
             if(response.status === 201){
@@ -21,7 +21,7 @@ export class AntwoordService{
 
     async leesAntwoorden(courseID : number){
         try{
-            const response = await axios.get(`/api/user/antwoord${courseID}`);
+            const response = await axios.get(`/api/user/antwoord/${courseID}`);
             if(response.status === 200){
                 const responseData : AntwoordReponseDTO[] = response.data;
                 return responseData;
@@ -34,14 +34,12 @@ export class AntwoordService{
         }
     }
 
-    validateAntwoord(data: AntwoordDTO[]): string[] {
-    const errors: string[] = [];
+    validateAntwoord(data: AntwoordDTO): string {
+    let errors: string = '';
 
-    data.forEach((item, index) => {
-        if (!item.tekst || item.tekst.trim() === "") {
-            errors.push(`Antwoord op positie ${index + 1} mist tekst.`);
+        if (!data.tekst || data.tekst.trim() === "") {
+            errors = `Antwoord  mist tekst.`;
         }
-    });
 
     return errors; // Returns an empty array if everything is valid
 }

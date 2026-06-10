@@ -2,11 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { groupService } from "../../Services/GroupService";
 import { heartbeatService } from "../../Services/HeartbeatService";
-import type { GroupResponse } from "../../contracts/Group";
 import type { HeartbeatData } from "../../contracts/HeartbeatData";
 import { wsService } from "../../WebSocketService";
 import { JoinGroupModal } from "./JoinGroupModal";
 import "./App.css";
+import type { GroupResponse } from "../../contracts/GroupResponse";
 
 interface HomeStudentProps {
   embedded?: boolean;
@@ -20,7 +20,7 @@ function Home_Student({ embedded = false }: HomeStudentProps) {
   const fetchGroepen = async () => {
     try {
       const response = await groupService.getGroups();
-      setGroepen(response.data);
+      setGroepen(response);
     } catch (error) {
       console.log(error);
     }

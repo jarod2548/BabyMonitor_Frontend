@@ -22,7 +22,7 @@ export default function ContinuousCTGPlayer({
       x: i,
       timestamp: i * TIME_STEP,
       fhrBpm: ctgData.hartbasis,
-      toco: 20,
+      wee: 20,
     }));
   });
 
