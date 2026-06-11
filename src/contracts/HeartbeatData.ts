@@ -1,5 +1,5 @@
 export type HeartbeatData = {
-    aanpassingAantal : number;
+    aantal : number;
     tijdDuratie : number;
-    isPositief : boolean;
+     varibiliteit : number;
 }

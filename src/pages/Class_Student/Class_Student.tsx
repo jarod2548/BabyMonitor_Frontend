@@ -1,36 +1,74 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./Class_Student.css";
 import CtgChart from "../../components/CtgChart/CtgChart";
 import type { CtgPoint } from "../../contracts/ctgpoint";
+import { useParams } from "react-router-dom";
+import { wsService } from "../../WebSocketService";
 
 export default function Class_Student() {
-  const [points, setPoints] = useState<CtgPoint[]>([]);
+  const { id } = useParams<{ id: string }>();
+
+  const [currentCtgData, setCurrentCtgData] = useState<CtgPoint>();
+
+  const [points, setPoints] = useState<CtgPoint[]>(
+    Array.from({ length: 240 }, (_, i) => ({
+      x: i,
+      timestamp: i,
+      fhrBpm: 140,
+      wee: 0,
+    }))
+  );
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/ws/ctg");
+    if (!id) return;
 
-    ws.onmessage = (event) => {
-      const newPoint: CtgPoint = JSON.parse(event.data);
+    const topic = `/topic/group/${id}/ctg`;
 
-      setPoints((prev) => {
-        const updated = [...prev, newPoint];
+    wsService.connect().then(() => {
+      wsService.subscribe<CtgPoint>(topic, (point) => {
+        setCurrentCtgData(point);
 
-        return updated.slice(-240);
+        setPoints((prev) => {
+          const updated = [...prev, point];
+          return updated.slice(-240);
+        });
       });
-    };
+    });
 
-    ws.onerror = (err) => {
-      console.error("CTG WebSocket error:", err);
+    return () => {
+      wsService.unsubscribe(topic);
     };
+  }, [id]);
 
-    return () => ws.close();
-  }, []);
+  const chartData = useMemo(() => {
+    return points.map((p, index) => ({
+      ...p,
+      x: index,
+    }));
+  }, [points]);
 
   return (
     <div className="dashboard-student">
-      <h1>Student Dashboard</h1>
 
-      <CtgChart data={points} />
+      <div className="CTGGrafiek">
+        <h2>CTG Grafiek</h2>
+        <CtgChart data={chartData} />
+      </div>
+
+      <div className="student-status">
+        <div className="pill">
+          Huidige hartslag: {currentCtgData?.fhrBpm ?? "-"}
+        </div>
+
+        <div className="pill">
+          Wee activiteit: {currentCtgData?.wee ?? "-"}
+        </div>
+
+        <div className="pill">
+          Tijd: {currentCtgData?.timestamp ?? "-"}
+        </div>
+      </div>
+
     </div>
   );
 }

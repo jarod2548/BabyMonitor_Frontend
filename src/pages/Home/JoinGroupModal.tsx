@@ -1,5 +1,5 @@
 import React from "react";
-import type { GroupResponse } from "../../contracts/Group";
+import type { GroupResponse } from "../../contracts/GroupResponse";
 
 interface Props {
   groepen: GroupResponse[];

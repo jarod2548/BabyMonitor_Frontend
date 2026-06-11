@@ -4,5 +4,5 @@ export type CtgPoint = {
     x: number;
     timestamp: number;
     fhrBpm: number;
-    toco: number;
+    wee: number;
 };
